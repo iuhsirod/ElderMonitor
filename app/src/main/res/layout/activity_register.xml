@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context="edu.wit.mobileapp.eldermonitor.Register">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+
+        <ImageButton
+            android:id="@+id/go_back_login"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="backToLoginClicked"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:background="@color/trans"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@id/name"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_gravity="left" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/first_name_input"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:paddingTop="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="right"
+                android:hint="@string/first_name" />
+
+            <EditText
+                android:id="@+id/last_name_input"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:paddingTop="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="right"
+                android:hint="@string/last_name" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/email_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:hint="@string/email" />
+
+    <EditText
+        android:id="@+id/birthday_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:inputType="date"
+        android:hint="@string/birthday"/>
+
+    <EditText
+        android:id="@+id/phone_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:inputType="date"
+        android:hint="@string/phone"/>
+
+    <EditText
+        android:id="@+id/password_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:hint="@string/password"/>
+
+    <EditText
+        android:id="@+id/verify_password_input"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:hint="@string/verify_password"/>
+
+
+    <Button
+        android:id="@+id/submit_registration"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/register"/>
+
+</LinearLayout>

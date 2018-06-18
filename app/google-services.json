@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "180700148227",
+    "firebase_url": "https://elmo-2be14.firebaseio.com",
+    "project_id": "elmo-2be14",
+    "storage_bucket": "elmo-2be14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180700148227:android:cf6dbb40091f6072",
+        "android_client_info": {
+          "package_name": "edu.wit.mobileapp.eldermonitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180700148227-lhvdp584dhovh0m01ermm86qjrgv2ve5.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "180700148227-lhvdp584dhovh0m01ermm86qjrgv2ve5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4cqaBGFsUpg3rOOiz4m2j1pwAJXu58Kc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

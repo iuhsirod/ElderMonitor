@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">ElderMonitor</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="birthday">Birthday</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="verify_password">Verify Password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="phone">Phone Number</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string-array name="sliding_drawer_array">
+        <item>Profile</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+
+</resources>
