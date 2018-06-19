@@ -71,16 +71,6 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
-        Button signOut = findViewById(R.id.sign_out);
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "Sign out button clicked");
-                mAuth.signOut();
-                startActivity(new Intent(MainActivity.this, Login.class));
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -96,7 +86,8 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -120,8 +111,18 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    protected void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        mDrawerToggle.syncState();
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -129,18 +130,30 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_main) {
+            Log.v(TAG, "home");
             // Handle the camera action
         }
         else if (id == R.id.nav_manage) {
+            Log.v(TAG, "manage");
         }
-        else if (id == R.id.nav_send) {
+        else if (id == R.id.nav_settings) {
+            Log.v(TAG, "settings");
+        }
+        else if (id == R.id.nav_logout) {
+            Log.v(TAG, "logout");
+
+            mAuth.signOut();
+            startActivity(new Intent(MainActivity.this, Login.class));
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
 
 
@@ -428,19 +441,5 @@ public class MainActivity extends AppCompatActivity
 
 //    }
 
-//    @Override
-//    protected void onPostCreate(Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-//        mDrawerToggle.syncState();
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (mDrawerToggle.onOptionsItemSelected(item)) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
 

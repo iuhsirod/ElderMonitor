@@ -9,6 +9,12 @@
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="phone">Phone Number</string>
+    <string name="save">Save</string>
+    <string name="change_password">Change Password</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="change_notification">Change Notifications</string>
+    <string name="edit_user">Edit User Details</string>
+    <string name="change_picture">Change Profile Picture</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

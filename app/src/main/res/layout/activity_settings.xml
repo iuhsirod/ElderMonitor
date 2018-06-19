@@ -25,22 +25,46 @@
 
     </android.support.v7.widget.Toolbar>
 
-
-
-    <EditText
-        android:id="@+id/first_name_input"
+    <LinearLayout
+        android:id="@id/name"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:hint="@string/first_name" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/last_name_input"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:hint="@string/last_name" />
+        <ImageButton
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_gravity="left" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/first_name_input"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:paddingTop="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="right"
+                android:hint="@string/first_name" />
+
+            <EditText
+                android:id="@+id/last_name_input"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:paddingTop="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="right"
+                android:hint="@string/last_name" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/email_input"
@@ -65,26 +89,40 @@
         android:inputType="date"
         android:hint="@string/phone"/>
 
-    <EditText
-        android:id="@+id/password_input"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:hint="@string/password"/>
-
-    <EditText
-        android:id="@+id/verify_password_input"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:hint="@string/verify_password"/>
-
-
     <Button
-        android:id="@+id/submit_registration"
+        android:id="@+id/edit_user_details"
         android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="@string/register"/>
+        android:text="@string/edit_user"/>
+
+    <Button
+        android:id="@+id/change_notify"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/change_notification"/>
+
+    <Button
+        android:id="@+id/delete_acc"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/delete_account"/>
+
+
+    <Button
+        android:id="@+id/change_pw"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/change_password"/>
+
+    <Button
+        android:id="@+id/change_pic"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/change_picture"/>
 
 </LinearLayout>
