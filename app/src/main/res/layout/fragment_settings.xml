@@ -5,25 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
-    tools:context="edu.wit.mobileapp.eldermonitor.Register">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary">
-
-        <ImageButton
-            android:id="@+id/go_back_login"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:onClick="backToLoginClicked"
-            android:src="@drawable/ic_arrow_back_black_24dp"
-            android:background="@color/trans"/>
-
-    </android.support.v7.widget.Toolbar>
+    android:gravity="center_horizontal">
 
     <LinearLayout
         android:id="@id/name"
@@ -43,51 +25,48 @@
             android:gravity="right"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/first_name_input"
+            <TextView
+                android:id="@+id/first_name"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:paddingTop="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="right"
-                android:hint="@string/first_name" />
+                android:textSize="20dp"/>
 
-            <EditText
-                android:id="@+id/last_name_input"
+            <TextView
+                android:id="@+id/last_name"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:paddingTop="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="right"
-                android:hint="@string/last_name" />
+                android:textSize="20dp"/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/email_input"
+    <TextView
+        android:id="@+id/email"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:hint="@string/email" />
+        android:layout_marginTop="5dp"/>
 
-    <EditText
-        android:id="@+id/birthday_input"
+    <TextView
+        android:id="@+id/birthday"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:inputType="date"
-        android:hint="@string/birthday"/>
+        android:inputType="date"/>
 
-    <EditText
-        android:id="@+id/phone_input"
+    <TextView
+        android:id="@+id/phone"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:inputType="date"
-        android:hint="@string/phone"/>
+        android:inputType="date"/>
 
     <Button
         android:id="@+id/edit_user_details"

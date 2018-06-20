@@ -19,14 +19,13 @@
         </activity>
 
         <activity android:name=".MainActivity"
-            android:label="Home"/>
+            android:label=""/>
         <activity android:name=".DetailActivity"
             android:label="@string/first_name"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".Register"
             android:label="@string/register"
             android:parentActivityName=".Login"/>
-
     </application>
 
 </manifest>
