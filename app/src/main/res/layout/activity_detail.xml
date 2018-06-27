@@ -11,13 +11,6 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary">
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_launcher_background"
-            android:background="@color/trans"/>
-
     </android.support.v7.widget.Toolbar>
 
     <TextView

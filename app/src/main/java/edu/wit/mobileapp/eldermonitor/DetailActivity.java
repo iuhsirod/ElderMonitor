@@ -25,19 +25,6 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        ImageButton back_button = findViewById(R.id.back_button);
-        back_button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Log.v(TAG, "main_button clicked");
-
-                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
     }
 
 }
