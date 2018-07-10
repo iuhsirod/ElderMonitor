@@ -8,18 +8,35 @@
     android:gravity="center_horizontal"
     tools:context=".ManageFragment">
 
+    <Button
+        android:id="@+id/invite_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="invite"/>
+    <Button
+        android:id="@+id/send_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/accept_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/decline_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:layout_margin="25dp"/>
 
-    <ListView
-        android:id="@+id/request_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"/>
+    <!--<ListView-->
+        <!--android:id="@+id/request_list"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"/>-->
 
 
 </LinearLayout>

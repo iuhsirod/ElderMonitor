@@ -14,7 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser()!= null) {
-                    Intent intent = new Intent(Login.this,MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
 
                     startActivity(intent);
                 }
@@ -66,7 +66,7 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(!task.isSuccessful()) {
-                        Toast.makeText(Login.this,"Incorrect username and password",Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this,"Incorrect username and password",Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -75,7 +75,7 @@ public class Login extends AppCompatActivity {
 
 
     public void registerButtonClicked(View view) {
-        Intent intent = new Intent(Login.this,Register.class);
+        Intent intent = new Intent(LoginActivity.this,Register.class);
 
         startActivity(intent);
     }

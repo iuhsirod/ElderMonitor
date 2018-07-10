@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -77,13 +78,16 @@ public class MainActivity extends AppCompatActivity
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -123,54 +127,61 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onPostCreate(Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-//        mDrawerToggle.syncState();
-//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        Intent intent;
+        switch (item.getItemId()) {
 
-        Fragment fragment = null;
-        Bundle bundle = new Bundle();
+            case R.id.nav_manage:
+                Log.v(TAG, "manage");
 
-        if (id == R.id.nav_main) {
-            Log.v(TAG, "home");
-            // Handle the camera action
+                intent = new Intent(this, ManageActivity.class);
+                this.startActivity(intent);
 
-            fragment = new HomeFragment();
+            case R.id.nav_settings:
+                Log.v(TAG, "settings");
+
+                SettingsFragment settingsFragment = new SettingsFragment();
+                getFragment(settingsFragment);
+                break;
+
+            case R.id.nav_logout:
+                Log.v(TAG, "logout");
+
+                mAuth.signOut();
+                intent = new Intent(this, LoginActivity.class);
+                this.startActivity(intent);
+
+
+            case R.id.nav_main:
+                Log.v(TAG, "home");
+                HomeFragment homeFragment = new HomeFragment();
+                getFragment(homeFragment);
+                break;
+
+            default:
+                Log.v(TAG, "home");
+                HomeFragment homeFragment1 = new HomeFragment();
+                getFragment(homeFragment1);
+                break;
         }
-        else if (id == R.id.nav_manage) {
-            Log.v(TAG, "manage");
 
-            fragment = new ManageFragment();
-        }
-        else if (id == R.id.nav_settings) {
-            Log.v(TAG, "settings");
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
 
-            fragment = new SettingsFragment();
-        }
-        else if (id == R.id.nav_logout) {
-            Log.v(TAG, "logout");
+        return true;
+    }
 
-            mAuth.signOut();
-            Intent intent = new Intent(this, Login.class);
-            this.startActivity(intent);
-        }
-
+    public void getFragment(Fragment fragment) {
         if (fragment != null) {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
+
 }

@@ -1,11 +1,15 @@
 package edu.wit.mobileapp.eldermonitor;
 
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,40 +20,18 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class ManageFragment extends Fragment {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("");
-    private FirebaseAuth firebaseAuth;
-
 
     private ListView listView;
 
     private ImageView mProfileImage;
     private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
-    private Button mProfileSendReqBtn, mDeclineBtn;
-
-    private DatabaseReference mUsersDatabase;
-
-    private ProgressDialog mProgressDialog;
-
-    private DatabaseReference mFriendReqDatabase;
-    private DatabaseReference mFriendDatabase;
-    private DatabaseReference mNotificationDatabase;
-
-    private DatabaseReference mRootRef;
 
     private FirebaseUser mCurrent_user;
 
@@ -58,6 +40,13 @@ public class ManageFragment extends Fragment {
     private FirebaseAuth mAuth;
 
     private String searchUID;
+    private String currentUID;
+
+    private ViewPager mViewPager;
+    private Toolbar mToolbar;
+    private ManagerAdapter mAdapter;
+    private TabLayout mTabLayout;
+
 
     private static final String TAG = "ManageFragment";
 
@@ -73,48 +62,33 @@ public class ManageFragment extends Fragment {
 
             final View view = inflater.inflate(R.layout.fragment_manage, container, false);
 
+            final String searchEmail = "yuana@wit.edu";
             mAuth = FirebaseAuth.getInstance();
+            currentUID = mAuth.getCurrentUser().getUid().toString();
+            myRef = FirebaseDatabase.getInstance().getReference("user");
 
-            //Gets current user uid
-            String currentUID = mAuth.getCurrentUser().getUid().toString();
-            String searchEmail = "yuana@wit.edug";
 
-            Query query = FirebaseDatabase.getInstance().getReference("user").orderByChild("email").equalTo("yuana@wit.edu");
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            searchUID = userSnapshot.getKey();
-                        }
-                    }
-                    else {
-                        System.out.println("failed to query");
-                    }
-                }
+            //approving request
+            Button mApproveRequestBtn = (Button) view.findViewById(R.id.accept_request);
+            mApproveRequestBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Getting Post failed, log a message
-                    Log.w(TAG, "find email address:onCancelled", databaseError.toException());
-                    // ...
+                public void onClick(View v) {
+                    FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child(searchUID).setValue("approve");
+                    FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child(currentUID).setValue("approve");
                 }
             });
 
-            //DATABASE
-            //sending request
-            FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child(searchUID).setValue("pending");
-            FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child(currentUID).setValue("pending");
-
-            //approving request
-            mProfileSendReqBtn = (Button) view.findViewById(R.id.accept_request);
-            FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child(searchUID).setValue("approve");
-            FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child(currentUID).setValue("approve");
-
             //declining request
-            mDeclineBtn = (Button) view.findViewById(R.id.decline_request);
-            FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child(searchUID).removeValue();
-            FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child(currentUID).removeValue();
+            Button mDeclineRequestBtn = (Button) view.findViewById(R.id.decline_request);
+            mDeclineRequestBtn.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child(searchUID).removeValue();
+                    FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child(currentUID).removeValue();
+                }
+            });
 
 
             // LISTVIEW
