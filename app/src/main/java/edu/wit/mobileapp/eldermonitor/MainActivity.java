@@ -3,9 +3,9 @@ package edu.wit.mobileapp.eldermonitor;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,7 +23,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.v(TAG, "mainactivity");
 
         Fragment fragment = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -88,6 +93,28 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        String UID = mAuth.getCurrentUser().getUid().toString();
+        DatabaseReference temp = FirebaseDatabase.getInstance().getReference("user").child(UID);
+        temp.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String fName = dataSnapshot.child("first_name").getValue(String.class);
+                TextView first = findViewById(R.id.first_name);
+                first.setText(fName);
+                
+                String lName = dataSnapshot.child("last_name").getValue(String.class);
+                TextView last = findViewById(R.id.last_name);
+                last.setText(lName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -138,8 +165,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_manage:
                 Log.v(TAG, "manage");
 
-                intent = new Intent(this, ManageActivity.class);
-                this.startActivity(intent);
+                SwitchFragment switchFragment = new SwitchFragment();
+                getFragment(switchFragment);
+                break;
 
             case R.id.nav_settings:
                 Log.v(TAG, "settings");
@@ -183,5 +211,7 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
         }
     }
+
+
 
 }

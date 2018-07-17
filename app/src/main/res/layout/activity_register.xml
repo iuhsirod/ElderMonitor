@@ -49,6 +49,18 @@
         android:layout_marginTop="5dp"
         android:hint="@string/email" />
 
+    <TextView
+        android:id="@+id/broadcast_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Broadcast"/>
+
+    <Switch
+        android:id="@+id/broadcast_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"/>
+
     <EditText
         android:id="@+id/birthday_input"
         android:layout_width="300dp"

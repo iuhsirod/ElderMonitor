@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class ManagerAdapter extends FragmentStatePagerAdapter {
 
-    private static int TAB_COUNT = 2;
+    private static int TAB_COUNT = 3;
 
     public ManagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,6 +23,8 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
                 return SearchFragment.newInstance();
             case 1:
                 return ManageFragment.newInstance();
+            case 2:
+                return RequestFragment.newInstance();
         }
         return null;
     }
@@ -40,6 +42,9 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
 
             case 1:
                 return "Manage";
+
+            case 2:
+                return "Requests";
 
         }
 

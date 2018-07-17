@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,9 @@ public class Register extends AppCompatActivity {
     private EditText mPhone_input;
     private EditText mPassword_input;
     private EditText mVerify_input;
+    private Switch mBroadcast_input;
+
+    private String broadcast = "false";
 
     private TextView password_req;
 
@@ -55,6 +59,7 @@ public class Register extends AppCompatActivity {
         mEmail_input = findViewById(R.id.email_input);
         mBirth_input = findViewById(R.id.birthday_input);
         mPhone_input = findViewById(R.id.phone_input);
+        mBroadcast_input = findViewById(R.id.broadcast_input);
         mPassword_input = findViewById(R.id.password_input);
         mVerify_input = findViewById(R.id.verify_password_input);
 
@@ -97,6 +102,10 @@ public class Register extends AppCompatActivity {
         final String email = mEmail_input.getText().toString();
         final String birth = mBirth_input.getText().toString();
         final String phone = mPhone_input.getText().toString();
+
+        if (mBroadcast_input.isChecked()) {
+            broadcast = "true";
+        }
         String password = mPassword_input.getText().toString();
         String verify = mVerify_input.getText().toString();
 
@@ -156,6 +165,7 @@ public class Register extends AppCompatActivity {
                         myRef.child("email").setValue(email);
                         myRef.child("birthday").setValue(birth);
                         myRef.child("phone").setValue(phone);
+                        myRef.child("broadcast").setValue(broadcast);
 
                         Intent signedup = new Intent(Register.this, LoginActivity.class);
                         startActivity(signedup);
