@@ -62,9 +62,9 @@
         <ListView
             android:id="@+id/searched_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
+            android:layout_height="375dp"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
             android:layout_below="@+id/search_result" />
     </RelativeLayout>
 

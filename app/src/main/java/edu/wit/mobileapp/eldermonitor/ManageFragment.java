@@ -64,7 +64,6 @@ public class ManageFragment extends Fragment {
     protected static List<ListItem> list = new ArrayList<ListItem>();
     protected static Hashtable<String, ListItem> users;
     protected static List<String> keyList = new ArrayList<String>();
-    protected static ListItem item = new ListItem();
 
 
     private static final String TAG = "ManageFragment";
@@ -80,8 +79,6 @@ public class ManageFragment extends Fragment {
                 @Nullable Bundle savedInstanceState) {
 
             final View view = inflater.inflate(R.layout.fragment_manage, container, false);
-            list.clear();
-            keyList.clear();
 
             final String searchEmail = "yuana@wit.edu";
             mAuth = FirebaseAuth.getInstance();
@@ -99,6 +96,7 @@ public class ManageFragment extends Fragment {
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    keyList.clear();
                     Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
                     Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
 
@@ -126,13 +124,16 @@ public class ManageFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
+                    list.clear();
                     for (int i=0; i<keyList.size(); i++) {
+                        ListItem item = new ListItem();
                         DataSnapshot current = dataSnapshot.child(keyList.get(i));
                         String uid = current.toString();
                         String first_name = current.child("first_name").getValue(String.class);
 
                         item.uid = keyList.get(i);
                         item.name = first_name;
+                        System.out.println(i + ": " + " " + item.uid + " " +item.name);
                         list.add(item);
                     }
 

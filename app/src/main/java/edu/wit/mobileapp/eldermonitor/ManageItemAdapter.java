@@ -1,6 +1,8 @@
 package edu.wit.mobileapp.eldermonitor;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,8 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
 
             @Override
             public void onClick(View v) {
+
+
                 FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child("approved").child(searchUID).removeValue();
                 FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child("approved").child(currentUID).removeValue();
             }
@@ -58,7 +62,7 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.name);
-        name.setText(item.name);
+        name.setText(position + " " + item.name);
 
         return view;
     }

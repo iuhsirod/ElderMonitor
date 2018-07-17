@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
 
     private EditText mUser_Email;
@@ -32,8 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         mUser_Email = findViewById(R.id.user_email);
         mUser_Password = findViewById(R.id.user_password);
 
-        mAuth = FirebaseAuth.getInstance();
-        authStateListener= new FirebaseAuth.AuthStateListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
 
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

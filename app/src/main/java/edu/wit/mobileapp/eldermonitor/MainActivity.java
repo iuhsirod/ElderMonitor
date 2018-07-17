@@ -44,20 +44,9 @@ public class MainActivity extends AppCompatActivity
     private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
     private Button mProfileSendReqBtn, mDeclineBtn;
 
-    private DatabaseReference mUsersDatabase;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
-    private ProgressDialog mProgressDialog;
 
-    private DatabaseReference mFriendReqDatabase;
-    private DatabaseReference mFriendDatabase;
-    private DatabaseReference mNotificationDatabase;
-
-    private DatabaseReference mRootRef;
-
-    private FirebaseUser mCurrent_user;
-
-    private String mCurrent_state;
-//
 
     private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -67,13 +56,47 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.v(TAG, "mainactivity");
+        Log.v(TAG, "1 MainActivity");
 
         Fragment fragment = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, fragment);
         ft.commit();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
+
+        String UID = mAuth.getCurrentUser().getUid().toString();
+        DatabaseReference temp = FirebaseDatabase.getInstance().getReference("user").child(UID);
+        temp.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String fName = dataSnapshot.child("first_name").getValue(String.class);
+
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navigationView.setNavigationItemSelectedListener(MainActivity.this);
+
+                TextView first = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_first_name);
+                first.setText(fName);
+                
+                String lName = dataSnapshot.child("last_name").getValue(String.class);
+
+
+                TextView last = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_last_name);
+
+                last.setText(lName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Log.v(TAG, "3 Outside onDataChange");
         Toolbar toolbar = findViewById(R.id.toolbar);
         if(toolbar != null) {
             setSupportActionBar(toolbar);
@@ -88,33 +111,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
-
-        String UID = mAuth.getCurrentUser().getUid().toString();
-        DatabaseReference temp = FirebaseDatabase.getInstance().getReference("user").child(UID);
-        temp.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String fName = dataSnapshot.child("first_name").getValue(String.class);
-                TextView first = findViewById(R.id.first_name);
-                first.setText(fName);
-                
-                String lName = dataSnapshot.child("last_name").getValue(String.class);
-                TextView last = findViewById(R.id.last_name);
-                last.setText(lName);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
     }
 
     @Override
@@ -183,17 +179,10 @@ public class MainActivity extends AppCompatActivity
                 intent = new Intent(this, LoginActivity.class);
                 this.startActivity(intent);
 
-
-            case R.id.nav_main:
+            default:
                 Log.v(TAG, "home");
                 HomeFragment homeFragment = new HomeFragment();
                 getFragment(homeFragment);
-                break;
-
-            default:
-                Log.v(TAG, "home");
-                HomeFragment homeFragment1 = new HomeFragment();
-                getFragment(homeFragment1);
                 break;
         }
 
