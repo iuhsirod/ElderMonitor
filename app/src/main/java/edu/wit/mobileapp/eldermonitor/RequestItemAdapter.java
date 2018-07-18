@@ -71,7 +71,7 @@ public class RequestItemAdapter extends ArrayAdapter<ListItem> {
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.request_name);
-        name.setText(item.name);
+        name.setText(item.fname);
 
         return view;
     }

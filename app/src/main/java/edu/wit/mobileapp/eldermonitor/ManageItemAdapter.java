@@ -61,7 +61,7 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.name);
-        name.setText(item.name);
+        name.setText(item.fname);
 
         return view;
     }

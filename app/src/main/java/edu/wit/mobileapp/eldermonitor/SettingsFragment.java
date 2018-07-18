@@ -1,6 +1,5 @@
 package edu.wit.mobileapp.eldermonitor;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +25,6 @@ public class SettingsFragment extends Fragment {
     DatabaseReference myRef = database.getReference("");
 
     private FirebaseAuth mAuth;
-
 
     private static final String TAG = "SettingsFragment";
 
@@ -51,18 +51,38 @@ public class SettingsFragment extends Fragment {
         final TextView phone = view.findViewById(R.id.phone);
         final TextView email = view.findViewById(R.id.email);
         final ImageView profile = view.findViewById(R.id.profile);
+        final Switch broadcast = view.findViewById(R.id.broadcast);
+
+        broadcast.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                myRef.child("broadcast").setValue(isChecked);
+            }
+        });
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String first_name = dataSnapshot.child("first_name").getValue(String.class);
-                String last_name = dataSnapshot.child("last_name").getValue(String.class);
+                String mfirst_name = dataSnapshot.child("first_name").getValue(String.class);
+                String mlast_name = dataSnapshot.child("last_name").getValue(String.class);
                 String memail = dataSnapshot.child("email").getValue(String.class);
+                Boolean mbroadcast = dataSnapshot.child("broadcast").getValue(Boolean.class);
                 //do what you want with the email
-                first.setText(first_name);
-                last.setText(last_name);
-                email.setText(memail);
-                profile.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.images));
+
+                ListItem item = new ListItem(getContext());
+                item.fname = mfirst_name;
+                item.lname = mlast_name;
+                item.email = memail;
+                item.broadcast = mbroadcast;
+
+                first.setText(item.fname);
+                last.setText(item.lname);
+                email.setText(item.email);
+
+                profile.setImageBitmap(item.image);
+
+                broadcast.setChecked(item.broadcast);
             }
 
             @Override

@@ -28,6 +28,9 @@
             android:parentActivityName=".LoginActivity"/>
         <activity android:name=".ManageActivity"
             android:label=""/>
+
+
     </application>
+
 
 </manifest>

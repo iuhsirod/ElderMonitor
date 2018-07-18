@@ -134,7 +134,7 @@ public class SearchFragment extends Fragment {
                             item.uid = keyList.get(i);
                             String first_name = current.child("first_name").getValue(String.class);
 
-                            item.name = first_name;
+                            item.fname = first_name;
                             list.add(item);
                         }
 

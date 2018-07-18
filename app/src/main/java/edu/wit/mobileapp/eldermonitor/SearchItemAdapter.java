@@ -49,6 +49,7 @@ public class SearchItemAdapter extends ArrayAdapter<ListItem> {
             public void onClick(View v) {
                 myRef.child(currentUID).child("contact").child("pending_out").child(searchUID).setValue("");
                 myRef.child(searchUID).child("contact").child("pending_in").child(currentUID).setValue("");
+                notifyDataSetChanged();
             }
         });
 
@@ -60,7 +61,7 @@ public class SearchItemAdapter extends ArrayAdapter<ListItem> {
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.search_name);
-        name.setText(item.name);
+        name.setText(item.fname);
 
         return view;
     }

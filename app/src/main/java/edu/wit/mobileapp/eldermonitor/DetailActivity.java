@@ -23,10 +23,10 @@ public class DetailActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static final String TAG = "DetailActivity";
 
-    private String currentUID;
-
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("");
+
+    private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class DetailActivity extends AppCompatActivity {
         final ListItem itemObj = new Gson().fromJson(jsonItem, ListItem.class);
 
         TextView name = findViewById(R.id.name);
-        name.setText(itemObj.name);
+        name.setText(itemObj.fname);
 
         myRef = FirebaseDatabase.getInstance().getReference("user").child(itemObj.uid).child("help");
 
@@ -61,6 +61,11 @@ public class DetailActivity extends AppCompatActivity {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     RadioGroup helpResp = findViewById(R.id.help_response);
                     helpResp.setVisibility(View.VISIBLE);
+
+                    String idName = dataSnapshot.child(currentUID).getValue().toString();
+                    int id = getResources().getIdentifier(idName, "id", getPackageName());
+                    RadioButton radioButton = findViewById(id);
+                    radioButton.setChecked(true);
                 }
             }
 
@@ -70,36 +75,28 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUID = mAuth.getCurrentUser().getUid().toString();
-
-        RadioButton setOmw = findViewById(R.id.omw);
-        setOmw.setOnClickListener(new View.OnClickListener() {
-
+        final RadioGroup group = (RadioGroup) findViewById(R.id.help_response);
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                myRef.child(currentUID).setValue("omw");
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int id = group.getCheckedRadioButtonId();
+                System.out.println(id);
+
+                switch (id) {
+                    case R.id.omw:
+                        myRef.child(currentUID).setValue("omw");
+                        break;
+                    case R.id.available:
+                        myRef.child(currentUID).setValue("available");
+                        break;
+                    case R.id.busy:
+                        myRef.child(currentUID).setValue("busy");
+                        break;
+                    default:
+                        myRef.child(currentUID).setValue("");
+                        break;
+                }
             }
         });
-
-        RadioButton setAvail = findViewById(R.id.available);
-        setAvail.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                myRef.child(currentUID).setValue("available");
-            }
-        });
-
-        RadioButton setBusy = findViewById(R.id.busy);
-        setBusy.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                myRef.child(currentUID).setValue("busy");
-            }
-        });
-
-
     }
 }

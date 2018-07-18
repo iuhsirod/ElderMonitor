@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
                         if (broadcaster) {
                             ListItem item = new ListItem(getContext());
                             item.uid = keyList.get(i);
-                            item.name = first_name;
+                            item.fname = first_name;
                             list.add(item);
                             System.out.println(list.size());
                         }

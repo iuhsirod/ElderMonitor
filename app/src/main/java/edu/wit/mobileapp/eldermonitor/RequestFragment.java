@@ -135,7 +135,7 @@ public class RequestFragment extends Fragment {
                         String first_name = current.child("first_name").getValue(String.class);
 
                         item.uid = inKeyList.get(i);
-                        item.name = first_name;
+                        item.fname = first_name;
                         inList.add(item);
                     }
 
@@ -210,7 +210,7 @@ public class RequestFragment extends Fragment {
                         String first_name = current.child("first_name").getValue(String.class);
 
                         item.uid = outKeyList.get(i);
-                        item.name = first_name;
+                        item.fname = first_name;
                         outList.add(item);
                     }
 

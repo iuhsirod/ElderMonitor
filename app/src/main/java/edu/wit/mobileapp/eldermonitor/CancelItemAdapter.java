@@ -53,6 +53,7 @@ public class CancelItemAdapter extends ArrayAdapter<ListItem> {
                 Log.v(TAG, "Canceling request");
                 myRef.child(currentUID).child("contact").child("pending_out").child(searchUID).removeValue();
                 myRef.child(searchUID).child("contact").child("pending_in").child(currentUID).removeValue();
+                notifyDataSetChanged();
             }
         });
 
@@ -64,7 +65,7 @@ public class CancelItemAdapter extends ArrayAdapter<ListItem> {
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.name);
-        name.setText(item.name);
+        name.setText(item.fname);
 
         return view;
     }

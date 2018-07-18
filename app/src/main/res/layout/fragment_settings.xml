@@ -55,6 +55,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"/>
 
+    <Switch
+        android:id="@+id/broadcast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Broadcast" />
+
     <TextView
         android:id="@+id/birthday"
         android:layout_width="300dp"
