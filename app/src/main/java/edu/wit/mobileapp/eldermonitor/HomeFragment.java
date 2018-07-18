@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment {
 
                         boolean broadcaster = current.child("broadcast").getValue(Boolean.class);
                         if (broadcaster) {
-                            ListItem item = new ListItem();
+                            ListItem item = new ListItem(getContext());
                             item.uid = keyList.get(i);
                             item.name = first_name;
                             list.add(item);

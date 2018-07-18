@@ -48,7 +48,6 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
             @Override
             public void onClick(View v) {
 
-
                 FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child("approved").child(searchUID).removeValue();
                 FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child("approved").child(currentUID).removeValue();
             }
@@ -62,7 +61,7 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.name);
-        name.setText(position + " " + item.name);
+        name.setText(item.name);
 
         return view;
     }

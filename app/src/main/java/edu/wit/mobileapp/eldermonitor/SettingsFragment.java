@@ -1,5 +1,6 @@
 package edu.wit.mobileapp.eldermonitor;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,6 +50,7 @@ public class SettingsFragment extends Fragment {
         final TextView birth = view.findViewById(R.id.birthday);
         final TextView phone = view.findViewById(R.id.phone);
         final TextView email = view.findViewById(R.id.email);
+        final ImageView profile = view.findViewById(R.id.profile);
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -59,6 +62,7 @@ public class SettingsFragment extends Fragment {
                 first.setText(first_name);
                 last.setText(last_name);
                 email.setText(memail);
+                profile.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.images));
             }
 
             @Override

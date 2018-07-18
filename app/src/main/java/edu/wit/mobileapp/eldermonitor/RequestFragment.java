@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -60,9 +61,6 @@ public class RequestFragment extends Fragment {
     protected static List<ListItem> outList = new ArrayList<ListItem>();
     protected static List<String> outKeyList = new ArrayList<String>();
 
-    protected static ListItem item = new ListItem();
-
-
     private static final String TAG = "ManageFragment";
 
     public static RequestFragment newInstance() {
@@ -76,10 +74,6 @@ public class RequestFragment extends Fragment {
                                  @Nullable Bundle savedInstanceState) {
 
             final View view = inflater.inflate(R.layout.fragment_request, container, false);
-            inList.clear();
-            inKeyList.clear();
-            outList.clear();
-            outKeyList.clear();
 
             mAuth = FirebaseAuth.getInstance();
             currentUID = mAuth.getCurrentUser().getUid().toString();
@@ -96,6 +90,7 @@ public class RequestFragment extends Fragment {
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    inKeyList.clear();
 
                     // There may be multiple users with the email address, so we need to loop over the matches
 
@@ -131,9 +126,11 @@ public class RequestFragment extends Fragment {
             curr.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
+                    inList.clear();
                     for (int i = 0; i < inKeyList.size(); i++) {
                         DataSnapshot current = dataSnapshot.child(inKeyList.get(i));
+
+                        ListItem item = new ListItem(getContext());
                         String uid = current.toString();
                         String first_name = current.child("first_name").getValue(String.class);
 
@@ -149,6 +146,8 @@ public class RequestFragment extends Fragment {
                     //Assign ListItemAdapter to listview
                     ListView rListView = view.findViewById(R.id.incoming_list);
                     rListView.setAdapter(rAdapter);
+
+                    ListUtils.setDynamicHeight(rListView);
                 }
 
                 @Override
@@ -156,6 +155,8 @@ public class RequestFragment extends Fragment {
 
                 }
             });
+
+
 
 
             //outgoing
@@ -169,7 +170,7 @@ public class RequestFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // There may be multiple users with the email address, so we need to loop over the matches
-
+                    outKeyList.clear();
                     if (dataSnapshot.getChildrenCount() == 0) {
                         Log.v(TAG, "there's none....");
                     }
@@ -201,14 +202,14 @@ public class RequestFragment extends Fragment {
             curr.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
+                    outList.clear();
                     for (int i = 0; i < outKeyList.size(); i++) {
+                        ListItem item = new ListItem(getContext());
                         DataSnapshot current = dataSnapshot.child(outKeyList.get(i));
                         String uid = current.toString();
                         String first_name = current.child("first_name").getValue(String.class);
 
                         item.uid = outKeyList.get(i);
-                        System.out.println("hi " +item.uid);
                         item.name = first_name;
                         outList.add(item);
                     }
@@ -221,6 +222,7 @@ public class RequestFragment extends Fragment {
                     ListView mListView = view.findViewById(R.id.outgoing_list);
                     mListView.setAdapter(cAdapter);
 
+                    ListUtils.setDynamicHeight(mListView);
                 }
 
                 @Override
@@ -230,6 +232,27 @@ public class RequestFragment extends Fragment {
             });
 
         return view;
+    }
+
+    public static class ListUtils {
+        public static void setDynamicHeight(ListView mListView) {
+            ListAdapter mListAdapter = mListView.getAdapter();
+            if (mListAdapter == null) {
+                // when adapter is null
+                return;
+            }
+            int height = 0;
+            int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+            for (int i = 0; i < mListAdapter.getCount(); i++) {
+                View listItem = mListAdapter.getView(i, null, mListView);
+                listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                height += listItem.getMeasuredHeight();
+            }
+            ViewGroup.LayoutParams params = mListView.getLayoutParams();
+            params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
+            mListView.setLayoutParams(params);
+            mListView.requestLayout();
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package edu.wit.mobileapp.eldermonitor;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -74,20 +75,20 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String fName = dataSnapshot.child("first_name").getValue(String.class);
-
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                 navigationView.setNavigationItemSelectedListener(MainActivity.this);
 
+                String fName = dataSnapshot.child("first_name").getValue(String.class);
                 TextView first = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_first_name);
                 first.setText(fName);
-                
+
                 String lName = dataSnapshot.child("last_name").getValue(String.class);
-
-
                 TextView last = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_last_name);
-
                 last.setText(lName);
+
+                ImageView profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
+                profile.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.images));
+
             }
 
             @Override

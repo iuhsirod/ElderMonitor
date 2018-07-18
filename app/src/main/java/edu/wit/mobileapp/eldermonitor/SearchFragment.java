@@ -47,7 +47,6 @@ public class SearchFragment extends Fragment {
     protected static List<ListItem> list = new ArrayList<ListItem>();
     protected static Hashtable<String, ListItem> users;
     protected static List<String> keyList = new ArrayList<String>();
-    protected static ListItem item = new ListItem();
 
     private final String TAG = "ManageFragment";
 
@@ -89,7 +88,7 @@ public class SearchFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // There may be multiple users with the email address, so we need to loop over the matches
-
+                        keyList.clear();
                         searchResults.setText(String.valueOf(dataSnapshot.getChildrenCount()));
                         if (dataSnapshot.getChildrenCount() == 0) {
                             Log.v(TAG, "there's none....");
@@ -125,8 +124,10 @@ public class SearchFragment extends Fragment {
                 curr.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-
+                        list.clear();
                         for (int i = 0; i < keyList.size(); i++) {
+
+                            ListItem item = new ListItem(getContext());
                             DataSnapshot current = dataSnapshot.child(keyList.get(i));
                             String uid = current.toString();
                             //TODO fix

@@ -66,7 +66,7 @@ public class RequestItemAdapter extends ArrayAdapter<ListItem> {
         //Set image
         ImageView image;
         image = (ImageView)view.findViewById(R.id.image);
-//        image.setImageBitmap(item.image);
+        image.setImageBitmap(item.image);
 
         //Set user name
         TextView name;

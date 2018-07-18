@@ -80,7 +80,6 @@ public class ManageFragment extends Fragment {
 
             final View view = inflater.inflate(R.layout.fragment_manage, container, false);
 
-            final String searchEmail = "yuana@wit.edu";
             mAuth = FirebaseAuth.getInstance();
             currentUID = mAuth.getCurrentUser().getUid().toString();
             myRef = FirebaseDatabase.getInstance().getReference("user");
@@ -90,7 +89,6 @@ public class ManageFragment extends Fragment {
             mProfileName = (TextView) view.findViewById(R.id.request_name);
 
             String UID = mAuth.getCurrentUser().getUid().toString();
-
 
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("user").child(UID).child("contact").child("approved");
             myRef.addValueEventListener(new ValueEventListener() {
@@ -126,14 +124,13 @@ public class ManageFragment extends Fragment {
 
                     list.clear();
                     for (int i=0; i<keyList.size(); i++) {
-                        ListItem item = new ListItem();
+                        ListItem item = new ListItem(getContext());
                         DataSnapshot current = dataSnapshot.child(keyList.get(i));
                         String uid = current.toString();
                         String first_name = current.child("first_name").getValue(String.class);
 
                         item.uid = keyList.get(i);
                         item.name = first_name;
-                        System.out.println(i + ": " + " " + item.uid + " " +item.name);
                         list.add(item);
                     }
 
