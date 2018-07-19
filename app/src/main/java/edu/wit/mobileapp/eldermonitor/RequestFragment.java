@@ -3,10 +3,7 @@ package edu.wit.mobileapp.eldermonitor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -30,30 +26,19 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RequestFragment extends Fragment {
+    private static final String TAG = "RequestFragment";
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("");
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("user");
 
-    private ListView listView;
+    private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
     private ImageView mProfileImage;
-    private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
+    private TextView mProfileName;
     private TextView searchResults;
 
-    private FirebaseUser mCurrent_user;
-
-    private String mCurrent_state;
-
-    private FirebaseAuth mAuth;
-
     private String searchUID;
-    private String currentUID;
-
-    private ViewPager mViewPager;
-    private Toolbar mToolbar;
-    private ManagerAdapter mAdapter;
-    private TabLayout mTabLayout;
-
 
     protected static List<ListItem> inList = new ArrayList<ListItem>();
     protected static List<String> inKeyList = new ArrayList<String>();
@@ -61,7 +46,6 @@ public class RequestFragment extends Fragment {
     protected static List<ListItem> outList = new ArrayList<ListItem>();
     protected static List<String> outKeyList = new ArrayList<String>();
 
-    private static final String TAG = "ManageFragment";
 
     public static RequestFragment newInstance() {
         return new RequestFragment();
@@ -72,27 +56,21 @@ public class RequestFragment extends Fragment {
         public View onCreateView(final LayoutInflater inflater,
                                  @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
+            Log.v(TAG, "Entering onCreate");
 
             final View view = inflater.inflate(R.layout.fragment_request, container, false);
-
-            mAuth = FirebaseAuth.getInstance();
-            currentUID = mAuth.getCurrentUser().getUid().toString();
-            myRef = FirebaseDatabase.getInstance().getReference("user");
 
             //incoming
             mProfileName = (TextView) view.findViewById(R.id.request_name);
 
-            mAuth = FirebaseAuth.getInstance();
+            DatabaseReference pendingInRef = myRef.child(currentUID).child("contact").child("pending_in");
 
-            DatabaseReference curr = FirebaseDatabase.getInstance().getReference("user");
-            myRef = FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child("pending_in");
-
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            pendingInRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    inKeyList.clear();
+                    Log.v(TAG, "Current contact pending in");
 
-                    // There may be multiple users with the email address, so we need to loop over the matches
+                    inKeyList.clear();
 
                     if (dataSnapshot.getChildrenCount() == 0) {
                         Log.v(TAG, "there's none....");
@@ -122,16 +100,17 @@ public class RequestFragment extends Fragment {
                 }
             });
 
-
-            curr.addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v(TAG, "User reference");
+
                     inList.clear();
                     for (int i = 0; i < inKeyList.size(); i++) {
+
                         DataSnapshot current = dataSnapshot.child(inKeyList.get(i));
 
                         ListItem item = new ListItem(getContext());
-                        String uid = current.toString();
                         String first_name = current.child("first_name").getValue(String.class);
 
                         item.uid = inKeyList.get(i);
@@ -147,6 +126,8 @@ public class RequestFragment extends Fragment {
                     ListView rListView = view.findViewById(R.id.incoming_list);
                     rListView.setAdapter(rAdapter);
 
+                    rAdapter.notifyDataSetChanged();
+
                     ListUtils.setDynamicHeight(rListView);
                 }
 
@@ -156,20 +137,16 @@ public class RequestFragment extends Fragment {
                 }
             });
 
-
-
-
             //outgoing
             mProfileName = (TextView) view.findViewById(R.id.request_name);
 
-            mAuth = FirebaseAuth.getInstance();
+            DatabaseReference pendingOutRef = myRef.child(currentUID).child("contact").child("pending_out");
 
-            myRef = FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child("pending_out");
-
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            pendingOutRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    // There may be multiple users with the email address, so we need to loop over the matches
+                    Log.v(TAG, "Current contact pending out");
+
                     outKeyList.clear();
                     if (dataSnapshot.getChildrenCount() == 0) {
                         Log.v(TAG, "there's none....");
@@ -199,14 +176,16 @@ public class RequestFragment extends Fragment {
                 }
             });
 
-            curr.addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v(TAG, "User reference");
+
                     outList.clear();
                     for (int i = 0; i < outKeyList.size(); i++) {
+
                         ListItem item = new ListItem(getContext());
                         DataSnapshot current = dataSnapshot.child(outKeyList.get(i));
-                        String uid = current.toString();
                         String first_name = current.child("first_name").getValue(String.class);
 
                         item.uid = outKeyList.get(i);
@@ -221,6 +200,8 @@ public class RequestFragment extends Fragment {
                     //Assign ListItemAdapter to listview
                     ListView mListView = view.findViewById(R.id.outgoing_list);
                     mListView.setAdapter(cAdapter);
+
+                    cAdapter.notifyDataSetChanged();
 
                     ListUtils.setDynamicHeight(mListView);
                 }

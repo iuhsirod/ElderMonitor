@@ -6,8 +6,10 @@ package edu.wit.mobileapp.eldermonitor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 public class ManagerAdapter extends FragmentStatePagerAdapter {
+    private static final String TAG = "ManagerAdapter";
 
     private static int TAB_COUNT = 3;
 
@@ -17,6 +19,7 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Log.v(TAG, "Entering getItem");
 
         switch (position) {
             case 0:
@@ -31,11 +34,15 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
+        Log.v(TAG, "Entering getCount");
+
         return TAB_COUNT;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
+        Log.v(TAG, "Entering getPageTitle");
+
         switch (position) {
             case 0:
                 return "Search";

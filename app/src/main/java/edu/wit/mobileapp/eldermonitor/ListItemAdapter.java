@@ -1,6 +1,7 @@
 package edu.wit.mobileapp.eldermonitor;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,17 @@ import android.widget.TextView;
 import java.util.List;
 
 public class ListItemAdapter extends ArrayAdapter<ListItem> {
+    private static final String TAG = "ListItemAdapter";
     private LayoutInflater mInflater;
 
     public ListItemAdapter (Context context, int rid, List<ListItem> list) {
         super(context, rid, list);
+
         mInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.v(TAG, "Entering getView");
         //Retrieve data
         ListItem item = getItem(position);
 

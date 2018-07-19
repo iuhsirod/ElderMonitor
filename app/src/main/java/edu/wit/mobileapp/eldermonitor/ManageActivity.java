@@ -5,8 +5,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 public class ManageActivity extends AppCompatActivity {
+    private static final String TAG = "ManageActivity";
 
     private ViewPager mViewPager;
     private Toolbar mToolbar;
@@ -15,13 +17,15 @@ public class ManageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "Entering onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_switch);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if(toolbar != null) {
-            setSupportActionBar(toolbar);
 
+            setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
@@ -30,6 +34,7 @@ public class ManageActivity extends AppCompatActivity {
     }
 
     private void setViewPager() {
+        Log.v(TAG, "Entering setViewPager");
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new ManagerAdapter(getSupportFragmentManager());

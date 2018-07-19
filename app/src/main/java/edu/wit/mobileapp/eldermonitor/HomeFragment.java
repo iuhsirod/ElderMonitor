@@ -22,48 +22,51 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    public static final String TITLE = "Home";
-    private static final String TAG = "Home Fragment";
+    private static final String TAG = "HomeFragment";
+
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("user");
+
+    private String currentUID;
 
     private static List<ListItem> list = new ArrayList<ListItem>();
     private static List<String> keyList = new ArrayList<String>();
 
-
     public static HomeFragment newInstance() {
-
         return new HomeFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Log.v(TAG, "1 HomeFragment");
+        Log.v(TAG, "Entering onCreateView");
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         if (mAuth.getCurrentUser() != null) {
+            Log.v(TAG, "Valid user");
 
-            String UID = mAuth.getCurrentUser().getUid().toString();
+            currentUID = mAuth.getCurrentUser().getUid().toString();
 
-            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("user").child(UID).child("contact").child("approved");
-            myRef.addValueEventListener(new ValueEventListener() {
+            DatabaseReference approvedRef = myRef.child(currentUID).child("contact").child("approved");
+            approvedRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v(TAG, "Contact approved reference");
 
-                    Log.v(TAG, "2 onDataChange");
                     keyList.clear();
                     Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
                     Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
 
                     while (iterator.hasNext()) {
                         try {
-                            //uid
+                            Log.v(TAG, "Iterating through keys...");
+
                             DataSnapshot current = iterator.next();
                             keyList.add(current.getKey().toString());
 
@@ -78,33 +81,28 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-
-            Log.v(TAG, "3 Outside first onDataChange");
-            DatabaseReference curr = FirebaseDatabase.getInstance().getReference("user");
-
-            curr.addListenerForSingleValueEvent(new ValueEventListener() {
+            //
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v(TAG, "User reference");
 
-                    Log.v(TAG, "4 onDataChange");
                     list.clear();
                     for (int i = 0; i < keyList.size(); i++) {
 
-                        System.out.println("k" + keyList.size());
                         DataSnapshot current = dataSnapshot.child(keyList.get(i));
-                        String uid = current.toString();
                         String first_name = current.child("first_name").getValue(String.class);
 
                         boolean broadcaster = current.child("broadcast").getValue(Boolean.class);
                         if (broadcaster) {
+                            Log.v(TAG, "User is broadcaster");
+
                             ListItem item = new ListItem(getContext());
                             item.uid = keyList.get(i);
                             item.fname = first_name;
                             list.add(item);
-                            System.out.println(list.size());
                         }
                     }
-                    System.out.println(list.size());
 
                     //Create ListItemAdapter
                     ListItemAdapter adapter;
@@ -117,6 +115,7 @@ public class HomeFragment extends Fragment {
                     // Go to DetailActivity
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                             Intent intent = new Intent(getActivity(), DetailActivity.class);
                             intent.putExtra("item", new Gson().toJson(list.get(position)));
 
@@ -131,8 +130,6 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
-
-        Log.v(TAG, "5");
 
         return view;
     }

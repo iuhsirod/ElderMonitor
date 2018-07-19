@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,22 +32,23 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("");
+    private final String TAG = "SearchFragment";
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("user");
 
     private ImageView mProfileImage;
-    private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
+    private TextView mProfileName;
 
-    private FirebaseAuth mAuth;
 
     private String searchUID;
-    private String currentUID;
+    private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
     protected static List<ListItem> list = new ArrayList<ListItem>();
     protected static Hashtable<String, ListItem> users;
     protected static List<String> keyList = new ArrayList<String>();
 
-    private final String TAG = "ManageFragment";
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -59,6 +59,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Log.v(TAG, "Entering onCreate");
 
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
         list.clear();
@@ -67,41 +68,36 @@ public class SearchFragment extends Fragment {
         final EditText emailInput = (EditText) view.findViewById(R.id.search_email_input);
         final TextView searchResults = (TextView) view.findViewById(R.id.num_results);
 
-        //search_email_input
-        mAuth = FirebaseAuth.getInstance();
-        myRef = FirebaseDatabase.getInstance().getReference("user");
-
-        currentUID = mAuth.getCurrentUser().getUid().toString();
-
         //approving request
         ImageButton search = (ImageButton) view.findViewById(R.id.search_email_btn);
         search.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                Log.v(TAG, "Entering search by email");
 
                 String searchEmail = emailInput.getText().toString();
-                Log.v(TAG, "Searching for " + searchEmail);
 
                 Query query = myRef.orderByChild("email").equalTo(searchEmail);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // There may be multiple users with the email address, so we need to loop over the matches
+                        Log.v(TAG, "Search by email reference");
+
                         keyList.clear();
                         searchResults.setText(String.valueOf(dataSnapshot.getChildrenCount()));
                         if (dataSnapshot.getChildrenCount() == 0) {
-                            Log.v(TAG, "there's none....");
+                            Log.v(TAG, "No children found");
                         }
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            searchUID = userSnapshot.getKey();
-                            Log.v(TAG, "found " + searchUID);
+                            Log.v(TAG, dataSnapshot.getChildrenCount() + " children found");
                         }
 
                         Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
                         Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
 
                         while (iterator.hasNext()) {
+                            Log.v(TAG, "Iterating and adding to keyList");
                             try {
                                 //uid
                                 DataSnapshot current = iterator.next();
@@ -118,19 +114,16 @@ public class SearchFragment extends Fragment {
                     }
                 });
 
-
-                DatabaseReference curr = FirebaseDatabase.getInstance().getReference("user");
-
-                curr.addListenerForSingleValueEvent(new ValueEventListener() {
+                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.v(TAG, "User reference");
+
                         list.clear();
                         for (int i = 0; i < keyList.size(); i++) {
 
                             ListItem item = new ListItem(getContext());
                             DataSnapshot current = dataSnapshot.child(keyList.get(i));
-                            String uid = current.toString();
-                            //TODO fix
                             item.uid = keyList.get(i);
                             String first_name = current.child("first_name").getValue(String.class);
 
@@ -150,23 +143,19 @@ public class SearchFragment extends Fragment {
                         // Go to DetailActivity
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.v(TAG, "Redirecting to DetailedActivity");
+
                                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                                 startActivity(intent);
                             }
                         });
-
                     }
-//                    FirebaseDatabase.getInstance().getReference("user").child(currentUID).child("contact").child(searchUID).setValue("pending");
-//                    FirebaseDatabase.getInstance().getReference("user").child(searchUID).child("contact").child(currentUID).setValue("pending");
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
-
-                System.out.println("9" + list.size());
-
             }
         });
 

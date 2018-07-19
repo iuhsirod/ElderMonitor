@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -22,9 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("");
-    private FirebaseAuth firebaseAuth;
+    private static final String TAG = "Register";
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("user");
 
     private EditText mFirst_input;
     private EditText mLast_input;
@@ -35,13 +38,13 @@ public class Register extends AppCompatActivity {
     private EditText mVerify_input;
     private Switch mBroadcast_input;
 
-    private String broadcast = "false";
+    private boolean broadcast = false;
 
+    private String currentUID = mAuth.getCurrentUser().getUid().toString();
     private TextView password_req;
 
     private Button mSubmit_button;
 
-    private static final String TAG = "Register";
 
     /**
      *
@@ -49,10 +52,10 @@ public class Register extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "Entering onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        firebaseAuth = FirebaseAuth.getInstance();
 
         mFirst_input = findViewById(R.id.first_name_input);
         mLast_input = findViewById(R.id.last_name_input);
@@ -88,6 +91,8 @@ public class Register extends AppCompatActivity {
      * @param view
      */
     public void backToLoginClicked(View view) {
+        Log.v(TAG, "Entering backToLoginClicked");
+
         Intent intent = new Intent(Register.this,LoginActivity.class);
 
         startActivity(intent);
@@ -97,6 +102,8 @@ public class Register extends AppCompatActivity {
      *
      */
     private void userRegister() {
+        Log.v(TAG, "Entering userRegister");
+
         final String first = mFirst_input.getText().toString();
         final String last = mLast_input.getText().toString();
         final String email = mEmail_input.getText().toString();
@@ -104,7 +111,7 @@ public class Register extends AppCompatActivity {
         final String phone = mPhone_input.getText().toString();
 
         if (mBroadcast_input.isChecked()) {
-            broadcast = "true";
+            broadcast = true;
         }
         String password = mPassword_input.getText().toString();
         String verify = mVerify_input.getText().toString();
@@ -149,7 +156,7 @@ public class Register extends AppCompatActivity {
 
         // Verify passwords match
         if(TextUtils.equals(password, verify)) {
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -157,9 +164,7 @@ public class Register extends AppCompatActivity {
 
                         Toast.makeText(Register.this, "Successful Registration", Toast.LENGTH_LONG).show();
 
-                        String user = firebaseAuth.getCurrentUser().getUid();
-
-                        myRef = database.getReference("user").child(user);
+                        myRef = database.getReference("user").child(currentUID);
                         myRef.child("first_name").setValue(first);
                         myRef.child("last_name").setValue(last);
                         myRef.child("email").setValue(email);

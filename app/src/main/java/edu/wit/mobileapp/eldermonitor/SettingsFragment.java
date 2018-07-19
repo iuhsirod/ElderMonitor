@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +21,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class SettingsFragment extends Fragment {
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("");
-
-    private FirebaseAuth mAuth;
-
     private static final String TAG = "SettingsFragment";
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("user");
+
+    private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -37,13 +38,11 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Log.v(TAG, "Entering onCreateView");
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
-
-        String UID = mAuth.getCurrentUser().getUid().toString();
-        myRef = FirebaseDatabase.getInstance().getReference("user").child(UID);
+        final DatabaseReference user = FirebaseDatabase.getInstance().getReference("user").child(currentUID);
 
         final TextView first = view.findViewById(R.id.first_name);
         final TextView last = view.findViewById(R.id.last_name);
@@ -55,15 +54,16 @@ public class SettingsFragment extends Fragment {
 
         broadcast.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.v(TAG, "Broadcaster checked");
 
-
-                myRef.child("broadcast").setValue(isChecked);
+                user.child("broadcast").setValue(isChecked);
             }
         });
 
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        user.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "Current user reference");
                 String mfirst_name = dataSnapshot.child("first_name").getValue(String.class);
                 String mlast_name = dataSnapshot.child("last_name").getValue(String.class);
                 String memail = dataSnapshot.child("email").getValue(String.class);

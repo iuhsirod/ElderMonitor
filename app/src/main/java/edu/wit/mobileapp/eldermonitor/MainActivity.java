@@ -1,6 +1,5 @@
 package edu.wit.mobileapp.eldermonitor;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "MainActivity";
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -42,22 +41,24 @@ public class MainActivity extends AppCompatActivity
 
     //
     private ImageView mProfileImage;
-    private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
+    private TextView mProfileName;
     private Button mProfileSendReqBtn, mDeclineBtn;
 
     private FirebaseAuth.AuthStateListener authStateListener;
 
 
-
-    private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("user");
 
+    private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "Entering onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.v(TAG, "1 MainActivity");
 
         Fragment fragment = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -69,11 +70,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
-        String UID = mAuth.getCurrentUser().getUid().toString();
-        DatabaseReference temp = FirebaseDatabase.getInstance().getReference("user").child(UID);
-        temp.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference user = myRef.child(currentUID);
+        user.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.v(TAG, "Current user reference");
 
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                 navigationView.setNavigationItemSelectedListener(MainActivity.this);
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity
 
                 ImageView profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
                 profile.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.images));
-
             }
 
             @Override
@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Log.v(TAG, "3 Outside onDataChange");
         Toolbar toolbar = findViewById(R.id.toolbar);
         if(toolbar != null) {
             setSupportActionBar(toolbar);
@@ -116,6 +115,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        Log.v(TAG, "Entering onBackPressed");
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -127,13 +128,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.v(TAG, "Entering onCreateOptionsMenu");
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.v(TAG, "Entering onOptionsItemSelected");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -155,33 +160,35 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Log.v(TAG, "Entering onNavigationItemSelected");
         // Handle navigation view item clicks here.
         Intent intent;
         switch (item.getItemId()) {
 
             case R.id.nav_manage:
-                Log.v(TAG, "manage");
+                Log.v(TAG, "Manage");
 
                 SwitchFragment switchFragment = new SwitchFragment();
                 getFragment(switchFragment);
                 break;
 
             case R.id.nav_settings:
-                Log.v(TAG, "settings");
+                Log.v(TAG, "Settings");
 
                 SettingsFragment settingsFragment = new SettingsFragment();
                 getFragment(settingsFragment);
                 break;
 
             case R.id.nav_logout:
-                Log.v(TAG, "logout");
+                Log.v(TAG, "Logout");
 
                 mAuth.signOut();
                 intent = new Intent(this, LoginActivity.class);
                 this.startActivity(intent);
 
             default:
-                Log.v(TAG, "home");
+                Log.v(TAG, "Home");
+
                 HomeFragment homeFragment = new HomeFragment();
                 getFragment(homeFragment);
                 break;
@@ -194,6 +201,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void getFragment(Fragment fragment) {
+        Log.v(TAG, "Entering getFragment");
+
         if (fragment != null) {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -201,7 +210,4 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
         }
     }
-
-
-
 }
