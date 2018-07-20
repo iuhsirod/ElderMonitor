@@ -92,23 +92,25 @@ public class HomeFragment extends Fragment {
 
                         DataSnapshot current = dataSnapshot.child(keyList.get(i));
                         String first_name = current.child("first_name").getValue(String.class);
+                        String last_name = current.child("last_name").getValue(String.class);
 
                         boolean broadcaster = current.child("broadcast").getValue(Boolean.class);
                         if (broadcaster) {
                             Log.v(TAG, "User is broadcaster");
 
-                            ListItem item = new ListItem(getContext());
+                            ListItem item = new ListItem(getActivity());
                             item.uid = keyList.get(i);
                             item.fname = first_name;
+                            item.lname = last_name;
                             list.add(item);
                         }
                     }
 
-                    //Create ListItemAdapter
-                    ListItemAdapter adapter;
-                    adapter = new ListItemAdapter(getActivity(), 0, list);
+                    //Create HomeItemAdapter
+                    HomeItemAdapter adapter;
+                    adapter = new HomeItemAdapter(getActivity(), 0, list);
 
-                    //Assign ListItemAdapter to listview
+                    //Assign HomeItemAdapter to listview
                     ListView listView = view.findViewById(R.id.newListView);
                     listView.setAdapter(adapter);
 

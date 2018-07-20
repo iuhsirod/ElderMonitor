@@ -42,10 +42,9 @@ public class LoginActivity extends AppCompatActivity {
                 Log.v(TAG, "Authenticating");
 
                 if (firebaseAuth.getCurrentUser()!= null) {
-
                     Log.v(TAG, "Valid authentication");
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
 
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
             }

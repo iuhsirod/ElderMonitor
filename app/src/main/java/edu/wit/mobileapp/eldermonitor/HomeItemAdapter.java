@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ListItemAdapter extends ArrayAdapter<ListItem> {
-    private static final String TAG = "ListItemAdapter";
+public class HomeItemAdapter extends ArrayAdapter<ListItem> {
+    private static final String TAG = "HomeItemAdapter";
     private LayoutInflater mInflater;
 
-    public ListItemAdapter (Context context, int rid, List<ListItem> list) {
+    public HomeItemAdapter(Context context, int rid, List<ListItem> list) {
         super(context, rid, list);
 
         mInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
@@ -27,17 +27,17 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
         ListItem item = getItem(position);
 
         //User layout file to generate View
-        View view = mInflater.inflate(R.layout.list_item, null);
+        View view = mInflater.inflate(R.layout.home_list_item, null);
 
         //Set image
         ImageView image;
-        image = (ImageView)view.findViewById(R.id.image);
+        image = (ImageView)view.findViewById(R.id.profile);
         image.setImageBitmap(item.image);
 
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.name);
-        name.setText(item.fname);
+        name.setText(item.fname + " " + item.lname);
 
         return view;
     }

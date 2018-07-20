@@ -1,8 +1,8 @@
 package edu.wit.mobileapp.eldermonitor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +26,7 @@ public class DetailActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("user");
 
-    private String currentUID = mAuth.getCurrentUser().getUid().toString();
+    private String currentUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,80 +35,99 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        setSupportActionBar((android.support.v7.widget.Toolbar)findViewById(R.id.toolbar));
-        ActionBar actionBar = getSupportActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (mAuth.getCurrentUser() == null) {
+            Log.v(TAG, "no auth");
 
-        String jsonItem = "";
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            jsonItem = extras.getString("item");
+            Intent intent = new Intent(DetailActivity.this, LoginActivity.class);
+            startActivity(intent);
         }
+        else {
+            Log.v(TAG, "Valid");
 
-        final ListItem itemObj = new Gson().fromJson(jsonItem, ListItem.class);
+            currentUID = mAuth.getCurrentUser().getUid().toString();
+            setSupportActionBar((android.support.v7.widget.Toolbar) findViewById(R.id.toolbar));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView name = findViewById(R.id.name);
-        name.setText(itemObj.fname);
+            String jsonItem = "";
+            Bundle extras = getIntent().getExtras();
 
-        myRef = database.getReference("user").child(itemObj.uid).child("help");
-
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Log.v(TAG, "Help data reference");
-                if (dataSnapshot.getChildrenCount() == 0) {
-                    Log.v(TAG, "No children found");
-                }
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    Log.v(TAG, dataSnapshot.getChildrenCount() + " children found");
-
-                    RadioGroup helpResp = findViewById(R.id.help_response);
-                    helpResp.setVisibility(View.VISIBLE);
-
-                    String idName = dataSnapshot.child(currentUID).getValue().toString();
-                    int id = getResources().getIdentifier(idName, "id", getPackageName());
-                    RadioButton radioButton = findViewById(id);
-                    radioButton.setChecked(true);
-                }
+            if (extras != null) {
+                jsonItem = extras.getString("item");
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+            final ListItem itemObj = new Gson().fromJson(jsonItem, ListItem.class);
 
+            TextView fname = findViewById(R.id.name);
+            fname.setText(itemObj.fname + " " + itemObj.lname);
 
-        final RadioGroup group = (RadioGroup) findViewById(R.id.help_response);
-        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                Log.v(TAG, "Radio");
+            myRef = myRef.child(itemObj.uid);
 
-                int id = group.getCheckedRadioButtonId();
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                switch (id) {
-                    case R.id.omw:
-                        Log.v(TAG, "Radio = omw");
-                        myRef.child(currentUID).setValue("omw");
-                        break;
+                    Boolean help = dataSnapshot.child("help").getValue(Boolean.class);
+                    if (help) {
 
-                    case R.id.available:
-                        Log.v(TAG, "Radio = available");
-                        myRef.child(currentUID).setValue("available");
-                        break;
+                        RadioGroup helpResp = findViewById(R.id.help_response);
+                        helpResp.setVisibility(View.VISIBLE);
+                    }
 
-                    case R.id.busy:
-                        Log.v(TAG, "Radio = busy");
-                        myRef.child(currentUID).setValue("busy");
-                        break;
+                    DataSnapshot approved = dataSnapshot.child("contact").child("approved");
+                    if (approved != null) {
 
-                    default:
-                        myRef.child(currentUID).setValue("");
-                        break;
+                        String idName = approved.child(currentUID).getValue(String.class);
+
+                        if (idName.length() > 0) {
+
+                            int id = getResources().getIdentifier(idName, "id", getPackageName());
+                            RadioButton radioButton = findViewById(id);
+                            radioButton.setChecked(true);
+                        }
+                    }
                 }
-            }
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+
+
+            final RadioGroup group = (RadioGroup) findViewById(R.id.help_response);
+            group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    Log.v(TAG, "Radio");
+
+                    int id = group.getCheckedRadioButtonId();
+
+                    switch (id) {
+                        case R.id.omw:
+                            Log.v(TAG, "Radio = omw");
+
+                            myRef.child("contact").child("approved").child(currentUID).setValue("omw");
+                            break;
+
+                        case R.id.available:
+                            Log.v(TAG, "Radio = available");
+
+                            myRef.child("contact").child("approved").child(currentUID).setValue("available");
+                            break;
+
+                        case R.id.busy:
+                            Log.v(TAG, "Radio = busy");
+
+                            myRef.child("contact").child("approved").child(currentUID).setValue("busy");
+                            break;
+
+                        default:
+                            Log.v(TAG, "Radio = ");
+
+                            myRef.child("contact").child("approved").child(currentUID).setValue("");
+                            break;
+                    }
+                }
+            });
+        }
     }
 }

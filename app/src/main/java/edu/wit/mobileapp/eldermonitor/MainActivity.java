@@ -1,7 +1,12 @@
 package edu.wit.mobileapp.eldermonitor;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -27,11 +32,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
+
+    public static boolean isAppRunning;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -39,78 +47,109 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle mDrawerToggle;
     String[] mDrawerOptionLabels;
 
-    //
     private ImageView mProfileImage;
     private TextView mProfileName;
     private Button mProfileSendReqBtn, mDeclineBtn;
 
     private FirebaseAuth.AuthStateListener authStateListener;
 
-
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("user");
 
-    private String currentUID = mAuth.getCurrentUser().getUid().toString();
+    private String currentUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v(TAG, "Entering onCreate");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Fragment fragment = new HomeFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
-        ft.commit();
+        Log.v(TAG, "Entering onCreate");
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (mAuth.getCurrentUser() == null) {
 
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
-
-        DatabaseReference user = myRef.child(currentUID);
-        user.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.v(TAG, "Current user reference");
-
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                navigationView.setNavigationItemSelectedListener(MainActivity.this);
-
-                String fName = dataSnapshot.child("first_name").getValue(String.class);
-                TextView first = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_first_name);
-                first.setText(fName);
-
-                String lName = dataSnapshot.child("last_name").getValue(String.class);
-                TextView last = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_last_name);
-                last.setText(lName);
-
-                ImageView profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
-                profile.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.images));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if(toolbar != null) {
-            setSupportActionBar(toolbar);
-
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
         }
+        else {
+            Log.v(TAG, "Valid user");
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            currentUID = mAuth.getCurrentUser().getUid().toString();
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+            String token = FirebaseInstanceId.getInstance().getToken();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Tokens");
+            ref.child(currentUID).setValue(token);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Create channel to show notifications.
+                String channelId = "channel";
+                String channelName = "name";
+                NotificationManager notificationManager =
+                        getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                        channelName, NotificationManager.IMPORTANCE_LOW));
+            }
+
+            if (getIntent().getExtras() != null) {
+                for (String key : getIntent().getExtras().keySet()) {
+                    Object value = getIntent().getExtras().get(key);
+                    Log.d(TAG, "Key: " + key + " Value: " + value);
+                }
+            }
+
+
+            Fragment fragment = new HomeFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+            navigationView.setNavigationItemSelectedListener(this);
+            navigationView.getMenu().getItem(0).setChecked(true);
+
+            DatabaseReference user = myRef.child(currentUID);
+            user.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.v(TAG, "Current user reference");
+
+                    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                    navigationView.setNavigationItemSelectedListener(MainActivity.this);
+
+                    String fName = dataSnapshot.child("first_name").getValue(String.class);
+                    TextView first = (TextView) navigationView.getHeaderView(0).findViewById(R.id.first_name);
+                    first.setText(fName);
+
+                    String lName = dataSnapshot.child("last_name").getValue(String.class);
+                    TextView last = (TextView) navigationView.getHeaderView(0).findViewById(R.id.last_name);
+                    last.setText(lName);
+
+                    ImageView profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
+                    profile.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.images));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setHomeButtonEnabled(true);
+            }
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+        }
     }
 
     @Override
@@ -209,5 +248,13 @@ public class MainActivity extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.v(TAG, "Entering onDestroy");
+
+        super.onDestroy();
+        isAppRunning = false;
     }
 }

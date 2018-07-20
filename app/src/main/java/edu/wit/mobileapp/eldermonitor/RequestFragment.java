@@ -35,7 +35,7 @@ public class RequestFragment extends Fragment {
     private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
     private ImageView mProfileImage;
-    private TextView mProfileName;
+    private TextView fname, lname;
     private TextView searchResults;
 
     private String searchUID;
@@ -61,7 +61,8 @@ public class RequestFragment extends Fragment {
             final View view = inflater.inflate(R.layout.fragment_request, container, false);
 
             //incoming
-            mProfileName = (TextView) view.findViewById(R.id.request_name);
+            fname = (TextView) view.findViewById(R.id.first_name);
+            lname = (TextView) view.findViewById(R.id.last_name);
 
             DatabaseReference pendingInRef = myRef.child(currentUID).child("contact").child("pending_in");
 
@@ -111,24 +112,28 @@ public class RequestFragment extends Fragment {
                         DataSnapshot current = dataSnapshot.child(inKeyList.get(i));
 
                         ListItem item = new ListItem(getContext());
-                        String first_name = current.child("first_name").getValue(String.class);
+                        String fname = current.child("first_name").getValue(String.class);
+                        String lname = current.child("last_name").getValue(String.class);
 
                         item.uid = inKeyList.get(i);
-                        item.fname = first_name;
+                        item.fname = fname;
+                        item.lname = lname;
                         inList.add(item);
                     }
 
-                    //Create ListItemAdapter
+                    //Create HomeItemAdapter
                     RequestItemAdapter rAdapter;
                     rAdapter = new RequestItemAdapter(getActivity(), 0, inList);
 
-                    //Assign ListItemAdapter to listview
+                    //Assign HomeItemAdapter to listview
                     ListView rListView = view.findViewById(R.id.incoming_list);
                     rListView.setAdapter(rAdapter);
 
                     rAdapter.notifyDataSetChanged();
 
                     ListUtils.setDynamicHeight(rListView);
+
+
                 }
 
                 @Override
@@ -138,8 +143,6 @@ public class RequestFragment extends Fragment {
             });
 
             //outgoing
-            mProfileName = (TextView) view.findViewById(R.id.request_name);
-
             DatabaseReference pendingOutRef = myRef.child(currentUID).child("contact").child("pending_out");
 
             pendingOutRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -186,18 +189,20 @@ public class RequestFragment extends Fragment {
 
                         ListItem item = new ListItem(getContext());
                         DataSnapshot current = dataSnapshot.child(outKeyList.get(i));
-                        String first_name = current.child("first_name").getValue(String.class);
+                        String fname = current.child("first_name").getValue(String.class);
+                        String lname = current.child("last_name").getValue(String.class);
 
                         item.uid = outKeyList.get(i);
-                        item.fname = first_name;
+                        item.fname = fname;
+                        item.lname = lname;
                         outList.add(item);
                     }
 
-                    //Create ListItemAdapter
+                    //Create HomeItemAdapter
                     CancelItemAdapter cAdapter;
                     cAdapter = new CancelItemAdapter(getActivity(), 0, outList);
 
-                    //Assign ListItemAdapter to listview
+                    //Assign HomeItemAdapter to listview
                     ListView mListView = view.findViewById(R.id.outgoing_list);
                     mListView.setAdapter(cAdapter);
 
@@ -235,5 +240,7 @@ public class RequestFragment extends Fragment {
             mListView.requestLayout();
         }
     }
+
+
 }
 

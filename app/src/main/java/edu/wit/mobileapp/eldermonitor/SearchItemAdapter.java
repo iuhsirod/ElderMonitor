@@ -60,13 +60,13 @@ public class SearchItemAdapter extends ArrayAdapter<ListItem> {
 
         //Set image
         ImageView image;
-        image = (ImageView)view.findViewById(R.id.search_profile);
+        image = (ImageView)view.findViewById(R.id.profile);
         image.setImageBitmap(item.image);
 
         //Set user name
         TextView name;
-        name = (TextView)view.findViewById(R.id.search_name);
-        name.setText(item.fname);
+        name = (TextView)view.findViewById(R.id.name);
+        name.setText(item.fname + " " + item.lname);
 
         return view;
     }
