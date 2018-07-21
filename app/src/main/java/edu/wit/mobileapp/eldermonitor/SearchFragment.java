@@ -125,17 +125,19 @@ public class SearchFragment extends Fragment {
                             ListItem item = new ListItem(getContext());
                             DataSnapshot current = dataSnapshot.child(keyList.get(i));
                             item.uid = keyList.get(i);
-                            String first_name = current.child("first_name").getValue(String.class);
+                            String fname = current.child("first_name").getValue(String.class);
+                            String lname = current.child("last_name").getValue(String.class);
 
-                            item.fname = first_name;
+                            item.fname = fname;
+                            item.lname = lname;
                             list.add(item);
                         }
 
-                        //Create ListItemAdapter
+                        //Create HomeItemAdapter
                         SearchItemAdapter adapter;
                         adapter = new SearchItemAdapter(getActivity(), 0, list);
 
-                        //Assign ListItemAdapter to listview
+                        //Assign HomeItemAdapter to listview
                         ListView listView = view.findViewById(R.id.searched_list);
                         listView.setAdapter(adapter);
 

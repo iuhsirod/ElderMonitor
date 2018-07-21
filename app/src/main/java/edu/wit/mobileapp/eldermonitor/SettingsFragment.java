@@ -64,24 +64,23 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "Current user reference");
-                String mfirst_name = dataSnapshot.child("first_name").getValue(String.class);
-                String mlast_name = dataSnapshot.child("last_name").getValue(String.class);
-                String memail = dataSnapshot.child("email").getValue(String.class);
+
+                String fname = dataSnapshot.child("first_name").getValue(String.class);
+                String lname = dataSnapshot.child("last_name").getValue(String.class);
+                String eemail = dataSnapshot.child("email").getValue(String.class);
                 Boolean mbroadcast = dataSnapshot.child("broadcast").getValue(Boolean.class);
                 //do what you want with the email
 
-                ListItem item = new ListItem(getContext());
-                item.fname = mfirst_name;
-                item.lname = mlast_name;
-                item.email = memail;
+                ListItem item = new ListItem(getActivity());
+                item.fname = fname;
+                item.lname = lname;
+                item.email = eemail;
                 item.broadcast = mbroadcast;
 
                 first.setText(item.fname);
                 last.setText(item.lname);
                 email.setText(item.email);
-
                 profile.setImageBitmap(item.image);
-
                 broadcast.setChecked(item.broadcast);
             }
 

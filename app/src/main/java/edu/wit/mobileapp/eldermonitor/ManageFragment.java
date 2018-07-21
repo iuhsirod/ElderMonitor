@@ -31,8 +31,7 @@ public class ManageFragment extends Fragment {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("user");
 
-    private ImageView mProfileImage;
-    private TextView mProfileName;
+    private TextView fname, lname;
 
     protected static List<ListItem> list = new ArrayList<ListItem>();
     protected static List<String> keyList = new ArrayList<String>();
@@ -54,7 +53,8 @@ public class ManageFragment extends Fragment {
             final View view = inflater.inflate(R.layout.fragment_manage, container, false);
 
             // LISTVIEW
-            mProfileName = (TextView) view.findViewById(R.id.request_name);
+            fname = (TextView) view.findViewById(R.id.first_name);
+            lname = (TextView) view.findViewById(R.id.last_name);
 
             DatabaseReference approvedRef = myRef.child(currentUID).child("contact").child("approved");
             approvedRef.addValueEventListener(new ValueEventListener() {
@@ -94,19 +94,21 @@ public class ManageFragment extends Fragment {
 
                         ListItem item = new ListItem(getContext());
                         DataSnapshot current = dataSnapshot.child(keyList.get(i));
-                        String first_name = current.child("first_name").getValue(String.class);
+                        String fname = current.child("first_name").getValue(String.class);
+                        String lname = current.child("last_name").getValue(String.class);
 
                         item.uid = keyList.get(i);
-                        item.fname = first_name;
+                        item.fname = fname;
+                        item.lname = lname;
                         list.add(item);
                     }
 
-                    //Create ListItemAdapter
+                    //Create HomeItemAdapter
                     ManageItemAdapter adapter;
                     adapter = new ManageItemAdapter(getActivity(), 0, list);
 
-                    //Assign ListItemAdapter to listview
-                    ListView listView = view.findViewById(R.id.friend_list);
+                    //Assign HomeItemAdapter to listview
+                    ListView listView = view.findViewById(R.id.contact_list);
                     listView.setAdapter(adapter);
 
                     adapter.notifyDataSetChanged();

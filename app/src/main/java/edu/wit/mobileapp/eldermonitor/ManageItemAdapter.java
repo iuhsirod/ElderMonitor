@@ -1,6 +1,9 @@
 package edu.wit.mobileapp.eldermonitor;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +61,7 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
                 myRef.child(currentUID).child("contact").child("approved").child(searchUID).removeValue();
                 myRef.child(searchUID).child("contact").child("approved").child(currentUID).removeValue();
 
-                notifyDataSetChanged();
+                getFragment();
             }
         });
 
@@ -70,8 +73,18 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
         //Set user name
         TextView name;
         name = (TextView)view.findViewById(R.id.name);
-        name.setText(item.fname);
+        name.setText(item.fname + " " + item.lname);
 
         return view;
+    }
+
+    public void getFragment() {
+        Log.v(TAG, "Entering getFragment");
+
+        Fragment fragment = new ManageFragment();
+        FragmentTransaction ft = ((AppCompatActivity) getContext()).getSupportFragmentManager()
+                .beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.commit();
     }
 }

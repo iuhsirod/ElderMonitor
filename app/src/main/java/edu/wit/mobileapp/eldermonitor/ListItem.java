@@ -11,6 +11,7 @@ public class ListItem {
     public String lname;
     public String email;
     public boolean broadcast;
+    public boolean help;
 
     ListItem(Context context) {
         image = BitmapFactory.decodeResource(context.getResources(), R.drawable.images);
@@ -19,6 +20,7 @@ public class ListItem {
         lname = "";
         email = "";
         broadcast = false;
+        help = false;
 
     }
 }
