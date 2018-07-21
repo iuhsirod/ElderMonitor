@@ -23,6 +23,12 @@
         <activity android:name=".DetailActivity"
             android:label="@string/first_name"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".QuestionsList"
+            android:label=""
+            android:parentActivityName=".DetailActivity"/>
+        <activity android:name=".QuestionsEdit"
+            android:label=""
+            android:parentActivityName=".QuestionsList"/>
         <activity android:name=".Register"
             android:label="@string/register"
             android:parentActivityName=".LoginActivity"/>

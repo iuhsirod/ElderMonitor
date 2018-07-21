@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary">
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
 
     </android.support.v7.widget.Toolbar>
 
@@ -17,11 +17,12 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-    <VideoView
-        android:layout_width="wrap_content"
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
         android:layout_height="225dp" />
 
 
@@ -36,40 +37,46 @@
             android:id="@+id/omw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="omw"/>
+            android:text="omw" />
 
         <RadioButton
             android:id="@+id/available"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="available"/>
+            android:text="available" />
 
         <RadioButton
             android:id="@+id/busy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="busy"/>
+            android:text="busy" />
 
         <!--<ImageButton-->
-            <!--android:id="@+id/omw"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="RadioButton"-->
-            <!--android:src="@drawable/ic_directions_run_black_24dp"/>-->
+        <!--android:id="@+id/omw"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="RadioButton"-->
+        <!--android:src="@drawable/ic_directions_run_black_24dp"/>-->
 
         <!--<ImageButton-->
-            <!--android:id="@+id/available"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="RadioButton"-->
-            <!--android:src="@drawable/ic_accessibility_black_24dp"/>-->
+        <!--android:id="@+id/available"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="RadioButton"-->
+        <!--android:src="@drawable/ic_accessibility_black_24dp"/>-->
 
         <!--<ImageButton-->
-            <!--android:id="@+id/busy"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="RadioButton"-->
-            <!--android:src="@drawable/ic_event_busy_black_24dp"/>-->
+        <!--android:id="@+id/busy"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="RadioButton"-->
+        <!--android:src="@drawable/ic_event_busy_black_24dp"/>-->
     </RadioGroup>
+
+    <Button
+        android:id="@+id/viewQuestions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View/Set Questions" />
 
 </LinearLayout>

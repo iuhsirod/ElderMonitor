@@ -1,11 +1,14 @@
 package edu.wit.mobileapp.eldermonitor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -34,6 +37,9 @@ public class DetailActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        WebView myWebView = (WebView) findViewById(R.id.webview);
+        myWebView.loadUrl("http://192.168.1.189:8080/stream");
 
         setSupportActionBar((android.support.v7.widget.Toolbar)findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
@@ -110,5 +116,17 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Button goToQuestions = (Button)findViewById(R.id.viewQuestions);
+        goToQuestions.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewQuestionsIntent = new Intent(DetailActivity.this, QuestionsList.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("uid", itemObj.uid);
+                viewQuestionsIntent.putExtras(bundle);
+                startActivity(viewQuestionsIntent);
+            }
+        }));
     }
 }
