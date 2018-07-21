@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                             Intent intent = new Intent(getActivity(), DetailActivity.class);
-                            intent.putExtra("item", new Gson().toJson(list.get(position)));
+                            intent.putExtra("uid", list.get(position).uid);
 
                             startActivity(intent);
                         }

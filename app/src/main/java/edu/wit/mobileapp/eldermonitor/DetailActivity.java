@@ -18,7 +18,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -38,11 +37,12 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         if (mAuth.getCurrentUser() == null) {
-            Log.v(TAG, "no auth");
+            Log.v(TAG, "No auth");
 
             Intent intent = new Intent(DetailActivity.this, LoginActivity.class);
             startActivity(intent);
-        } else {
+        }
+        else {
             Log.v(TAG, "Valid");
 
             currentUID = mAuth.getCurrentUser().getUid().toString();
@@ -52,24 +52,21 @@ public class DetailActivity extends AppCompatActivity {
             WebView myWebView = (WebView) findViewById(R.id.webview);
             myWebView.loadUrl("http://192.168.1.189:8080/stream");
 
-            String jsonItem = "";
-            Bundle extras = getIntent().getExtras();
 
-            if (extras != null) {
-                jsonItem = extras.getString("item");
-            }
+            Bundle bundle = this.getIntent().getExtras();
+            final String UID = bundle.getString("uid");
 
-            final ListItem itemObj = new Gson().fromJson(jsonItem, ListItem.class);
+            DatabaseReference currUserRef = myRef.child(UID);
 
-            TextView fname = findViewById(R.id.name);
-            fname.setText(itemObj.fname + " " + itemObj.lname);
-
-            myRef = myRef.child(itemObj.uid);
-
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            currUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
+                    String fname = dataSnapshot.child("first_name").getValue(String.class);
+                    String lname = dataSnapshot.child("last_name").getValue(String.class);
+
+                    TextView name = findViewById(R.id.name);
+                    name.setText(fname + " " + lname);
                     Boolean help = dataSnapshot.child("help").getValue(Boolean.class);
                     if (help) {
 
@@ -137,11 +134,12 @@ public class DetailActivity extends AppCompatActivity {
             goToQuestions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent viewQuestionsIntent = new Intent(DetailActivity.this, QuestionsList.class);
+                    Intent intent = new Intent(DetailActivity.this, QuestionsActivity.class);
+
                     Bundle bundle = new Bundle();
-                    bundle.putString("uid", itemObj.uid);
-                    viewQuestionsIntent.putExtras(bundle);
-                    startActivity(viewQuestionsIntent);
+                    bundle.putString("uid", UID);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 1);
                 }
             });
         }

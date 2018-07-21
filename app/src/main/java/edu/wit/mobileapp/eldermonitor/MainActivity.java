@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
-
             Fragment fragment = new HomeFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
