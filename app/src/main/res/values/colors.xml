@@ -6,4 +6,6 @@
     <color name="white">#ffffff</color>
     <color name="gray">#7b7b7b</color>
     <color name="trans">@null</color>
+    <color name="red">#ff0000</color>
+    <color name="fadedRed">#53ea4e4e</color>
 </resources>

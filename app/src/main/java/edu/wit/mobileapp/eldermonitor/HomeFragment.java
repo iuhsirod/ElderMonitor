@@ -93,6 +93,7 @@ public class HomeFragment extends Fragment {
                         DataSnapshot current = dataSnapshot.child(keyList.get(i));
                         String first_name = current.child("first_name").getValue(String.class);
                         String last_name = current.child("last_name").getValue(String.class);
+                        Boolean help = current.child("help").getValue(Boolean.class);
 
                         boolean broadcaster = current.child("broadcast").getValue(Boolean.class);
                         if (broadcaster) {
@@ -102,6 +103,7 @@ public class HomeFragment extends Fragment {
                             item.uid = keyList.get(i);
                             item.fname = first_name;
                             item.lname = last_name;
+                            item.help = help;
                             list.add(item);
                         }
                     }

@@ -3,19 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="vertical"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:padding="5dp">
+
     <TextView
         android:id="@+id/question"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="22sp"/>
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/answer"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"/>
-
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

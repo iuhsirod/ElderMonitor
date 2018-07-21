@@ -55,8 +55,10 @@ public class QuestionsActivity extends AppCompatActivity {
 
                 Intent viewQuestionsIntent = new Intent(QuestionsActivity.this, EditActivity.class);
                 Bundle bundle = new Bundle();
+
                 bundle.putString("uid", UID);
                 viewQuestionsIntent.putExtras(bundle);
+
                 startActivity(viewQuestionsIntent);
             }
         });
@@ -66,7 +68,6 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Get map of users in datasnapshot
-//                getQuestions((Map<String,Object>) dataSnapshot.getValue(), UID);
 
                 list.clear();
                 Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
@@ -113,48 +114,7 @@ public class QuestionsActivity extends AppCompatActivity {
                 //handle databaseError
             }
         });
-
-
-
     }
-
-//    private void getQuestions(Map<String,Object> questions, final String userID) {
-//        Log.v(TAG, "Entering getQuestions");
-//
-//        for (Map.Entry<String, Object> entry : questions.entrySet()){
-//            //Get phone field and append to list
-//            questionsArray.add(entry.getKey().toString());
-//            answersArray.add(entry.getValue().toString());
-//
-//            Log.v(TAG, entry.getKey().toString() + " answer: " + entry.getValue().toString());
-//
-//            ArrayAdapter<String> adapter =
-//                    new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-//
-//            for(int i = 0; i<questionsArray.size(); i++){
-//                adapter.add(questionsArray.get(i) + "\n" + answersArray.get(i));
-//            }
-//
-//            ListView listView = (ListView)findViewById(R.id.questions_list);
-//            listView.setAdapter(adapter);
-//
-//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Log.v(TAG, "item " + position + " is clicked");
-//
-//                    Intent viewQuestionsIntent = new Intent(QuestionsActivity.this, EditActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("uid", userID);
-//                    bundle.putString("question", questionsArray.get(position));
-//                    bundle.putBoolean("isEdit", true);
-//
-//                    viewQuestionsIntent.putExtras(bundle);
-//                    startActivity(viewQuestionsIntent);
-//                }
-//            });
-//        }
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

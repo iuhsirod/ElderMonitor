@@ -52,16 +52,18 @@ public class EditActivity extends AppCompatActivity {
             answer = itemValue[1];
         }
 
-        final EditText setQuestion = (EditText) findViewById(R.id.input_question_value);
-        final EditText setAnswer = (EditText) findViewById(R.id.input_answer_value);
+        final EditText setQuestion = (EditText) findViewById(R.id.question_input);
+        final EditText setAnswer = (EditText) findViewById(R.id.answer_input);
 
         Button deleteQuestion = (Button) findViewById(R.id.delete_question);
         Button editQuestion = (Button) findViewById(R.id.edit_question);
 
         if (isEdit) {
             setQuestion.setText(question, TextView.BufferType.EDITABLE);
+            setAnswer.setText(answer, TextView.BufferType.EDITABLE);
             setQuestion.setEnabled(false);
-        } else {
+        }
+        else {
             deleteQuestion.setVisibility(View.GONE);
             editQuestion.setText("Add Question");
         }
@@ -72,7 +74,7 @@ public class EditActivity extends AppCompatActivity {
 
                 myRef.child(UID).child("questions").child(question).removeValue();
 
-                onBackPressed();
+                onOptionsItemSelected(null);
             }
         });
 
@@ -84,7 +86,7 @@ public class EditActivity extends AppCompatActivity {
                 question.put(setQuestion.getText().toString(), setAnswer.getText().toString());
                 myRef.updateChildren(question);
 
-                onBackPressed();
+                onOptionsItemSelected(null);
             }
         });
     }

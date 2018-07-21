@@ -39,6 +39,12 @@ public class HomeItemAdapter extends ArrayAdapter<ListItem> {
         name = (TextView)view.findViewById(R.id.name);
         name.setText(item.fname + " " + item.lname);
 
+        if(item.help) {
+            Log.v(TAG, "Help = true");
+            ImageView helpImg= view.findViewById(R.id.alert);
+            helpImg.setVisibility(view.VISIBLE);
+        }
+
         return view;
     }
 }

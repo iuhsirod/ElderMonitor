@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -72,6 +73,10 @@ public class DetailActivity extends AppCompatActivity {
 
                         RadioGroup helpResp = findViewById(R.id.help_response);
                         helpResp.setVisibility(View.VISIBLE);
+
+                        ImageView helpImg= findViewById(R.id.alert);
+                        helpImg.setVisibility(View.VISIBLE);
+
                     }
 
                     DataSnapshot approved = dataSnapshot.child("contact").child("approved");
