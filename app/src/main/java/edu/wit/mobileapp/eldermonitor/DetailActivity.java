@@ -42,8 +42,7 @@ public class DetailActivity extends AppCompatActivity {
 
             Intent intent = new Intent(DetailActivity.this, LoginActivity.class);
             startActivity(intent);
-        }
-        else {
+        } else {
             Log.v(TAG, "Valid");
 
             currentUID = mAuth.getCurrentUser().getUid().toString();
@@ -52,7 +51,7 @@ public class DetailActivity extends AppCompatActivity {
 
             WebView myWebView = (WebView) findViewById(R.id.webview);
             myWebView.loadUrl("http://192.168.1.189:8080/stream");
-          
+
             String jsonItem = "";
             Bundle extras = getIntent().getExtras();
 
@@ -132,19 +131,19 @@ public class DetailActivity extends AppCompatActivity {
                             break;
                     }
                 }
-            }
-        });
+            });
 
-        Button goToQuestions = (Button)findViewById(R.id.viewQuestions);
-        goToQuestions.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent viewQuestionsIntent = new Intent(DetailActivity.this, QuestionsList.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("uid", itemObj.uid);
-                viewQuestionsIntent.putExtras(bundle);
-                startActivity(viewQuestionsIntent);
-            }
-        }));
+            Button goToQuestions = (Button) findViewById(R.id.viewQuestions);
+            goToQuestions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent viewQuestionsIntent = new Intent(DetailActivity.this, QuestionsList.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("uid", itemObj.uid);
+                    viewQuestionsIntent.putExtras(bundle);
+                    startActivity(viewQuestionsIntent);
+                }
+            });
+        }
     }
 }
