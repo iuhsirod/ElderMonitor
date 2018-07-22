@@ -1,6 +1,10 @@
 package edu.wit.mobileapp.eldermonitor;
 
 import android.content.Context;
+import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,17 +48,17 @@ public class SearchItemAdapter extends ArrayAdapter<ListItem> {
 
         final String searchUID = item.uid;
 
-        ImageButton mSendRequestBtn = (ImageButton) view.findViewById(R.id.search_add);
+        final ImageButton mSendRequestBtn = (ImageButton) view.findViewById(R.id.search_add);
         mSendRequestBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "Sending request");
 
+                mSendRequestBtn.setVisibility(View.INVISIBLE);
+
                 myRef.child(currentUID).child("contact").child("pending_out").child(searchUID).setValue("");
                 myRef.child(searchUID).child("contact").child("pending_in").child(currentUID).setValue("");
-
-                notifyDataSetChanged();
             }
         });
 
@@ -70,4 +74,5 @@ public class SearchItemAdapter extends ArrayAdapter<ListItem> {
 
         return view;
     }
+
 }

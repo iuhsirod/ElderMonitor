@@ -37,10 +37,8 @@ public class Register extends AppCompatActivity {
     private EditText mPassword_input;
     private EditText mVerify_input;
     private Switch mBroadcast_input;
-
     private boolean broadcast = false;
 
-    private String currentUID = mAuth.getCurrentUser().getUid().toString();
     private TextView password_req;
 
     private Button mSubmit_button;
@@ -164,12 +162,15 @@ public class Register extends AppCompatActivity {
 
                         Toast.makeText(Register.this, "Successful Registration", Toast.LENGTH_LONG).show();
 
-                        myRef = database.getReference("user").child(currentUID);
+                        String currentUID = mAuth.getCurrentUser().getUid().toString();
+
+                        myRef = myRef.child(currentUID);
                         myRef.child("first_name").setValue(first);
                         myRef.child("last_name").setValue(last);
                         myRef.child("email").setValue(email);
                         myRef.child("birthday").setValue(birth);
                         myRef.child("phone").setValue(phone);
+                        myRef.child("help").setValue(false);
                         myRef.child("broadcast").setValue(broadcast);
 
                         Intent signedup = new Intent(Register.this, LoginActivity.class);

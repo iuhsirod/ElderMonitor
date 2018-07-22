@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,9 +32,12 @@ public class RequestItemAdapter extends ArrayAdapter<ListItem> {
 
     private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
-    public RequestItemAdapter(Context context, int rid, List<ListItem> list) {
+    private Fragment myFragment;
+
+    public RequestItemAdapter(Context context, int rid, List<ListItem> list, Fragment fragment) {
         super(context, rid, list);
 
+        myFragment = fragment;
         mInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -60,8 +64,7 @@ public class RequestItemAdapter extends ArrayAdapter<ListItem> {
                 myRef.child(currentUID).child("contact").child("approved").child(searchUID).setValue("");
                 myRef.child(searchUID).child("contact").child("approved").child(currentUID).setValue("");
 
-
-                getFragment();
+                getFragment(myFragment);
             }
         });
 
@@ -76,7 +79,7 @@ public class RequestItemAdapter extends ArrayAdapter<ListItem> {
                 myRef.child(currentUID).child("contact").child("pending_in").child(searchUID).removeValue();
                 myRef.child(searchUID).child("contact").child("pending_out").child(currentUID).removeValue();
 
-                getFragment();
+                getFragment(myFragment);
             }
         });
 
@@ -93,14 +96,14 @@ public class RequestItemAdapter extends ArrayAdapter<ListItem> {
         return view;
     }
 
-    public void getFragment() {
+
+    public void getFragment(Fragment fragment) {
         Log.v(TAG, "Entering getFragment");
 
-        Fragment fragment = new RequestFragment();
         FragmentTransaction ft = ((AppCompatActivity) getContext()).getSupportFragmentManager()
                 .beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
+        ft.detach(fragment);
+        ft.attach(fragment);
         ft.commit();
     }
-
 }

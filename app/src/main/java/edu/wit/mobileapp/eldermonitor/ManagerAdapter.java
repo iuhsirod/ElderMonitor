@@ -1,7 +1,4 @@
 package edu.wit.mobileapp.eldermonitor;
-/**
- * Created by huid on 6/27/2018.
- */
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +29,8 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
         return null;
     }
 
+
+
     @Override
     public int getCount() {
         Log.v(TAG, "Entering getCount");
@@ -57,4 +56,7 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
 
         return super.getPageTitle(position);
     }
+
+
+
 }

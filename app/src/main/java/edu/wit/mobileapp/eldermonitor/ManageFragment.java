@@ -105,7 +105,7 @@ public class ManageFragment extends Fragment {
 
                     //Create HomeItemAdapter
                     ManageItemAdapter adapter;
-                    adapter = new ManageItemAdapter(getActivity(), 0, list);
+                    adapter = new ManageItemAdapter(getActivity(), 0, list, ManageFragment.this);
 
                     //Assign HomeItemAdapter to listview
                     ListView listView = view.findViewById(R.id.contact_list);

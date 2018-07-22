@@ -46,6 +46,8 @@ public class RequestFragment extends Fragment {
     protected static List<ListItem> outList = new ArrayList<ListItem>();
     protected static List<String> outKeyList = new ArrayList<String>();
 
+    private ListView mListView;
+
 
     public static RequestFragment newInstance() {
         return new RequestFragment();
@@ -123,17 +125,13 @@ public class RequestFragment extends Fragment {
 
                     //Create HomeItemAdapter
                     RequestItemAdapter rAdapter;
-                    rAdapter = new RequestItemAdapter(getActivity(), 0, inList);
+                    rAdapter = new RequestItemAdapter(getActivity(), 0, inList, RequestFragment.this);
 
                     //Assign HomeItemAdapter to listview
                     ListView rListView = view.findViewById(R.id.incoming_list);
                     rListView.setAdapter(rAdapter);
 
-                    rAdapter.notifyDataSetChanged();
-
                     ListUtils.setDynamicHeight(rListView);
-
-
                 }
 
                 @Override
@@ -200,13 +198,11 @@ public class RequestFragment extends Fragment {
 
                     //Create HomeItemAdapter
                     CancelItemAdapter cAdapter;
-                    cAdapter = new CancelItemAdapter(getActivity(), 0, outList);
+                    cAdapter = new CancelItemAdapter(getActivity(), 0, outList, RequestFragment.this);
 
                     //Assign HomeItemAdapter to listview
-                    ListView mListView = view.findViewById(R.id.outgoing_list);
+                    mListView = view.findViewById(R.id.outgoing_list);
                     mListView.setAdapter(cAdapter);
-
-                    cAdapter.notifyDataSetChanged();
 
                     ListUtils.setDynamicHeight(mListView);
                 }

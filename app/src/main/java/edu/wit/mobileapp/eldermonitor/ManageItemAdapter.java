@@ -29,12 +29,14 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("user");
 
-
     private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
-    public ManageItemAdapter(Context context, int rid, List<ListItem> list) {
+    private Fragment myFragment;
+
+    public ManageItemAdapter(Context context, int rid, List<ListItem> list, Fragment fragment) {
         super(context, rid, list);
 
+        myFragment = fragment;
         mInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -49,7 +51,6 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
 
         final String searchUID = item.uid;
 
-
         //declining request
         ImageButton mDeleteBtn = (ImageButton) view.findViewById(R.id.remove);
         mDeleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +62,7 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
                 myRef.child(currentUID).child("contact").child("approved").child(searchUID).removeValue();
                 myRef.child(searchUID).child("contact").child("approved").child(currentUID).removeValue();
 
-                getFragment();
+                getFragment(myFragment);
             }
         });
 
@@ -78,13 +79,14 @@ public class ManageItemAdapter extends ArrayAdapter<ListItem> {
         return view;
     }
 
-    public void getFragment() {
+
+    public void getFragment(Fragment fragment) {
         Log.v(TAG, "Entering getFragment");
 
-        Fragment fragment = new ManageFragment();
         FragmentTransaction ft = ((AppCompatActivity) getContext()).getSupportFragmentManager()
                 .beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
+        ft.detach(fragment);
+        ft.attach(fragment);
         ft.commit();
     }
 }

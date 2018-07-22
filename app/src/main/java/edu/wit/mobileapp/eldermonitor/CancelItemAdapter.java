@@ -32,10 +32,12 @@ public class CancelItemAdapter extends ArrayAdapter<ListItem> {
 
     private String currentUID = mAuth.getCurrentUser().getUid().toString();
 
+    private Fragment myFragment;
 
-    public CancelItemAdapter(Context context, int rid, List<ListItem> list) {
+    public CancelItemAdapter(Context context, int rid, List<ListItem> list, Fragment fragment) {
         super(context, rid, list);
 
+        myFragment = fragment;
         mInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -61,7 +63,7 @@ public class CancelItemAdapter extends ArrayAdapter<ListItem> {
                 myRef.child(currentUID).child("contact").child("pending_out").child(searchUID).removeValue();
                 myRef.child(searchUID).child("contact").child("pending_in").child(currentUID).removeValue();
 
-                getFragment();
+                getFragment(myFragment);
             }
         });
 
@@ -78,13 +80,14 @@ public class CancelItemAdapter extends ArrayAdapter<ListItem> {
         return view;
     }
 
-    public void getFragment() {
+    public void getFragment(Fragment fragment) {
         Log.v(TAG, "Entering getFragment");
 
-        Fragment fragment = new RequestFragment();
         FragmentTransaction ft = ((AppCompatActivity) getContext()).getSupportFragmentManager()
                 .beginTransaction();
-        ft.replace(R.id.content_frame, fragment);
+        ft.detach(fragment);
+        ft.attach(fragment);
         ft.commit();
     }
+
 }

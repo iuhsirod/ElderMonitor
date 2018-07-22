@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "Entering onCreate");
 
         if (mAuth.getCurrentUser() == null) {
-
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+
             startActivity(intent);
         }
         else {

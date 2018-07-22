@@ -34,7 +34,27 @@ public class SwitchFragment extends Fragment {
 
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
         mAdapter = new ManagerAdapter(getActivity().getSupportFragmentManager());
+
         mViewPager.setAdapter(mAdapter);
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+                //Not used
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                //Force the fragment to reload its data
+                Fragment f = mAdapter.getItem(position);
+                f.onResume();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+                //Not used
+            }
+        });
 
         mTabLayout = (TabLayout) view.findViewById(R.id.tab);
         mTabLayout.setupWithViewPager(mViewPager);
