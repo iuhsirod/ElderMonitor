@@ -109,7 +109,14 @@ public class DetailActivity extends AppCompatActivity {
 
                     for(String key: keyList) {
                         String split[] = key.split(";");
-                        adapter.add(dataSnapshot.child(split[0]).child("first_name").getValue(String.class) + ": " + split[1]);
+
+                        System.out.println("HELP" + split[0]);
+                        if (split.length != 2) {
+                            adapter.add(dataSnapshot.child(split[0]).child("first_name").getValue(String.class) + ": ");
+                        }
+                        else {
+                            adapter.add(dataSnapshot.child(split[0]).child("first_name").getValue(String.class) + ": " + split[1]);
+                        }
                     }
 
                     ListView listView = (ListView)findViewById(R.id.resp_list);
