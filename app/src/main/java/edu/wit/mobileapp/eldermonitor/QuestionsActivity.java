@@ -32,6 +32,8 @@ public class QuestionsActivity extends AppCompatActivity {
     private ArrayList<String> list = new ArrayList<String>();
 
     private String UID;
+    private String fname;
+    private String lname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class QuestionsActivity extends AppCompatActivity {
 
         Bundle bundle = this.getIntent().getExtras();
         UID = bundle.getString("uid");
+        fname = bundle.getString("fname");
+        lname = bundle.getString("lname");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,6 +95,8 @@ public class QuestionsActivity extends AppCompatActivity {
                 ListView listView = findViewById(R.id.questions_list);
                 listView.setAdapter(adapter);
 
+                ListUtils.setDynamicHeight(listView);
+
                 // Go to DetailActivity
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -124,6 +130,8 @@ public class QuestionsActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
 
         bundle.putString("uid", UID);
+        bundle.putString("fname", fname);
+        bundle.putString("lname", lname);
         intent.putExtras(bundle);
 
         startActivity(intent);

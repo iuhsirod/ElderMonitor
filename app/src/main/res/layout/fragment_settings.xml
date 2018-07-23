@@ -1,79 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
     <LinearLayout
-        android:id="@+id/name"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="350dp"
+        android:layout_height="155dp"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:elevation="5dp"
+        android:layout_margin="20dp">
 
         <ImageView
             android:id="@+id/profile"
             android:layout_width="125dp"
             android:layout_height="125dp"
-            android:layout_gravity="left" />
+            android:layout_margin="15dp"
+            android:elevation="2dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:layout_marginTop="15dp">
 
             <TextView
-                android:id="@+id/first_name"
+                android:id="@+id/name"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:paddingTop="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="right"
+                android:paddingTop="15dp"
                 android:textSize="20dp"/>
 
             <TextView
-                android:id="@+id/last_name"
+                android:id="@+id/email"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:paddingTop="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="right"
-                android:textSize="20dp"/>
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/birthday"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:inputType="date"/>
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:inputType="date"/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"/>
 
     <Switch
         android:id="@+id/broadcast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Broadcast" />
+        android:text="Broadcast"
+        android:layout_margin="5dp"
+        android:textSize="20dp"/>
 
-    <TextView
-        android:id="@+id/birthday"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:inputType="date"/>
 
-    <TextView
-        android:id="@+id/phone"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:inputType="date"/>
 
     <Button
         android:id="@+id/edit_user_details"

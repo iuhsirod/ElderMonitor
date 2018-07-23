@@ -124,14 +124,24 @@ public class RequestFragment extends Fragment {
                     }
 
                     //Create HomeItemAdapter
-                    RequestItemAdapter rAdapter;
-                    rAdapter = new RequestItemAdapter(getActivity(), 0, inList, RequestFragment.this);
+                    if (inList.size() > 0) {
+                        System.out.println("size: " + inList.size());
+                        RequestItemAdapter rAdapter;
+                        rAdapter = new RequestItemAdapter(getActivity(), 0, inList, RequestFragment.this);
 
-                    //Assign HomeItemAdapter to listview
-                    ListView rListView = view.findViewById(R.id.incoming_list);
-                    rListView.setAdapter(rAdapter);
+                        //Assign HomeItemAdapter to listview
+                        ListView rListView = view.findViewById(R.id.incoming_list);
+                        rListView.setAdapter(rAdapter);
 
-                    ListUtils.setDynamicHeight(rListView);
+                        TextView incomingLabel = view.findViewById(R.id.incoming_label);
+                        incomingLabel.setText("Incoming Requests");
+
+
+                        TextView noPending = view.findViewById(R.id.no_pending);
+                        noPending.setText("");
+
+                        ListUtils.setDynamicHeight(rListView);
+                    }
                 }
 
                 @Override
@@ -196,15 +206,25 @@ public class RequestFragment extends Fragment {
                         outList.add(item);
                     }
 
-                    //Create HomeItemAdapter
-                    CancelItemAdapter cAdapter;
-                    cAdapter = new CancelItemAdapter(getActivity(), 0, outList, RequestFragment.this);
+                    if (outList.size() > 0) {
+                        System.out.println("size: " + outList.size());
+                        //Create HomeItemAdapter
+                        CancelItemAdapter cAdapter;
+                        cAdapter = new CancelItemAdapter(getActivity(), 0, outList, RequestFragment.this);
 
-                    //Assign HomeItemAdapter to listview
-                    mListView = view.findViewById(R.id.outgoing_list);
-                    mListView.setAdapter(cAdapter);
+                        //Assign HomeItemAdapter to listview
+                        mListView = view.findViewById(R.id.outgoing_list);
+                        mListView.setAdapter(cAdapter);
 
-                    ListUtils.setDynamicHeight(mListView);
+
+                        TextView outgoingLabel = view.findViewById(R.id.outgoing_label);
+                        outgoingLabel.setText("Outgoing Requests");
+
+                        TextView noPending = view.findViewById(R.id.no_pending);
+                        noPending.setText("");
+
+                        ListUtils.setDynamicHeight(mListView);
+                    }
                 }
 
                 @Override
@@ -215,28 +235,5 @@ public class RequestFragment extends Fragment {
 
         return view;
     }
-
-    public static class ListUtils {
-        public static void setDynamicHeight(ListView mListView) {
-            ListAdapter mListAdapter = mListView.getAdapter();
-            if (mListAdapter == null) {
-                // when adapter is null
-                return;
-            }
-            int height = 0;
-            int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-            for (int i = 0; i < mListAdapter.getCount(); i++) {
-                View listItem = mListAdapter.getView(i, null, mListView);
-                listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-                height += listItem.getMeasuredHeight();
-            }
-            ViewGroup.LayoutParams params = mListView.getLayoutParams();
-            params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
-            mListView.setLayoutParams(params);
-            mListView.requestLayout();
-        }
-    }
-
-
 }
 

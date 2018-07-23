@@ -19,7 +19,6 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -122,6 +121,8 @@ public class HomeFragment extends Fragment {
 
                             Intent intent = new Intent(getActivity(), DetailActivity.class);
                             intent.putExtra("uid", list.get(position).uid);
+                            intent.putExtra("fname", list.get(position).fname);
+                            intent.putExtra("lname", list.get(position).lname);
 
                             startActivity(intent);
                         }

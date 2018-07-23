@@ -7,8 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -16,9 +17,14 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -28,7 +34,12 @@ public class DetailActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("user");
 
+    List<String> respList = new ArrayList<String>();
+    List<String> keyList = new ArrayList<String>();
+
     private String currentUID;
+    private String fname;
+    private String lname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,47 +57,73 @@ public class DetailActivity extends AppCompatActivity {
         else {
             Log.v(TAG, "Valid");
 
+            fname = getIntent().getExtras().getString("fname");
+            lname = getIntent().getExtras().getString("lname");
+
+            TextView name = findViewById(R.id.name);
+            name.setText(fname + " " + lname);
+
             currentUID = mAuth.getCurrentUser().getUid().toString();
             setSupportActionBar((android.support.v7.widget.Toolbar) findViewById(R.id.toolbar));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             WebView myWebView = (WebView) findViewById(R.id.webview);
-            myWebView.loadUrl("http://192.168.1.189:8080/stream");
+            myWebView.loadUrl("http:/172.16.0.4:8080/stream");
 
 
             Bundle bundle = this.getIntent().getExtras();
             final String UID = bundle.getString("uid");
 
-            DatabaseReference currUserRef = myRef.child(UID);
+            respList.clear();
+            final DatabaseReference currUserRef = myRef;
 
-            currUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            currUserRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    System.out.println("1");
+                    keyList.clear();
+                    respList.clear();
 
-                    String fname = dataSnapshot.child("first_name").getValue(String.class);
-                    String lname = dataSnapshot.child("last_name").getValue(String.class);
-
-                    TextView name = findViewById(R.id.name);
-                    name.setText(fname + " " + lname);
-                    Boolean help = dataSnapshot.child("help").getValue(Boolean.class);
+                    Boolean help = dataSnapshot.child(UID).child("help").getValue(Boolean.class);
                     if (help) {
-
-                        RadioGroup helpResp = findViewById(R.id.help_response);
-                        helpResp.setVisibility(View.VISIBLE);
-
-                        ImageView helpImg= findViewById(R.id.alert);
-                        helpImg.setVisibility(View.VISIBLE);
-
+                        findViewById(R.id.help_label).setVisibility(View.VISIBLE);
+                        findViewById(R.id.help_response).setVisibility(View.VISIBLE);
                     }
 
-                    DataSnapshot approved = dataSnapshot.child("contact").child("approved");
+                    DataSnapshot approved = dataSnapshot.child(UID).child("contact").child("approved");
+                    Iterable<DataSnapshot> snapshotIterator = approved.getChildren();
+                    Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
+
+                    while (iterator.hasNext()) {
+                        System.out.println("2");
+                        try {
+                            DataSnapshot curr = iterator.next();
+                            keyList.add(curr.getKey() + ";" + curr.getValue(String.class));
+                        } catch (DatabaseException e) {
+                            Log.v(TAG, "preferences=" + e);
+                        }
+                    }
+
+                    ArrayAdapter<String> adapter =
+                            new ArrayAdapter<String>(DetailActivity.this, android.R.layout.simple_list_item_1);
+
+                    for(String key: keyList) {
+                        String split[] = key.split(";");
+                        adapter.add(dataSnapshot.child(split[0]).child("first_name").getValue(String.class) + ": " + split[1]);
+                    }
+
+                    ListView listView = (ListView)findViewById(R.id.resp_list);
+                    listView.setAdapter(adapter);
+
+                    //Radio
                     if (approved != null) {
 
-                        String idName = approved.child(currentUID).getValue(String.class);
+                        System.out.println("3");
+                        String resp = approved.child(currentUID).getValue(String.class);
 
-                        if (idName.length() > 0) {
+                        if (resp.length() > 0) {
+                            int id = getResources().getIdentifier(resp, "id", getPackageName());
 
-                            int id = getResources().getIdentifier(idName, "id", getPackageName());
                             RadioButton radioButton = findViewById(id);
                             radioButton.setChecked(true);
                         }
@@ -97,7 +134,6 @@ public class DetailActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-
 
             final RadioGroup group = (RadioGroup) findViewById(R.id.help_response);
             group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -111,25 +147,25 @@ public class DetailActivity extends AppCompatActivity {
                         case R.id.omw:
                             Log.v(TAG, "Radio = omw");
 
-                            myRef.child("contact").child("approved").child(currentUID).setValue("omw");
+                            myRef.child(UID).child("contact").child("approved").child(currentUID).setValue("omw");
                             break;
 
                         case R.id.available:
                             Log.v(TAG, "Radio = available");
 
-                            myRef.child("contact").child("approved").child(currentUID).setValue("available");
+                            myRef.child(UID).child("contact").child("approved").child(currentUID).setValue("available");
                             break;
 
                         case R.id.busy:
                             Log.v(TAG, "Radio = busy");
 
-                            myRef.child("contact").child("approved").child(currentUID).setValue("busy");
+                            myRef.child(UID).child("contact").child("approved").child(currentUID).setValue("busy");
                             break;
 
                         default:
                             Log.v(TAG, "Radio = ");
 
-                            myRef.child("contact").child("approved").child(currentUID).setValue("");
+                            myRef.child(UID).child("contact").child("approved").child(currentUID).setValue("");
                             break;
                     }
                 }
@@ -143,6 +179,8 @@ public class DetailActivity extends AppCompatActivity {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("uid", UID);
+                    bundle.putString("fname", fname);
+                    bundle.putString("lname", lname);
                     intent.putExtras(bundle);
                     startActivityForResult(intent, 1);
                 }

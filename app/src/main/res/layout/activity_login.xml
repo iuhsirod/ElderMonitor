@@ -4,60 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context="edu.wit.mobileapp.eldermonitor.LoginActivity">
 
-    <ImageView
-        android:layout_margin="25dp"
-        android:padding="10dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/common_full_open_on_phone"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="350dp"
+        android:layout_height="600dp"
+        android:background="@color/white"
+        android:elevation="5dp">
 
-    <EditText
-        android:id="@+id/user_email"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="@string/email"
-        android:textSize="22sp"
-        android:background="@drawable/border"/>
+        <ImageView
+            android:layout_margin="25dp"
+            android:padding="10dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:elevation="5dp"
+            android:src="@drawable/logo"/>
 
-    <EditText
-        android:id="@+id/user_password"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:textSize="22sp"
-        android:background="@drawable/border"/>
+        <EditText
+            android:id="@+id/user_email"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/email"
+            android:textSize="22sp"
+            android:background="@drawable/border"/>
 
-    <Button
-        android:id="@+id/do_login"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:onClick="loginButtonClicked"
-        android:text="@string/login"
-        android:visibility="visible"
-        android:background="@drawable/filled_border"/>
+        <EditText
+            android:id="@+id/user_password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textSize="22sp"
+            android:background="@drawable/border"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_margin="25dp"/>
+        <Button
+            android:id="@+id/do_login"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:onClick="loginButtonClicked"
+            android:text="@string/login"
+            android:visibility="visible"
+            android:background="@drawable/filled_border"/>
 
-    <Button
-        android:id="@+id/go_register"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:onClick="registerButtonClicked"
-        android:text="@string/register"
-        android:visibility="visible"
-        android:background="@drawable/filled_border"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="25dp"/>
 
+        <Button
+            android:id="@+id/go_register"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:onClick="registerButtonClicked"
+            android:text="@string/register"
+            android:visibility="visible"
+            android:background="@drawable/filled_border"/>
+    </LinearLayout>
 </LinearLayout>

@@ -44,8 +44,7 @@ public class SettingsFragment extends Fragment {
 
         final DatabaseReference user = FirebaseDatabase.getInstance().getReference("user").child(currentUID);
 
-        final TextView first = view.findViewById(R.id.first_name);
-        final TextView last = view.findViewById(R.id.last_name);
+        final TextView name = view.findViewById(R.id.name);
         final TextView birth = view.findViewById(R.id.birthday);
         final TextView phone = view.findViewById(R.id.phone);
         final TextView email = view.findViewById(R.id.email);
@@ -77,8 +76,7 @@ public class SettingsFragment extends Fragment {
                 item.email = eemail;
                 item.broadcast = mbroadcast;
 
-                first.setText(item.fname);
-                last.setText(item.lname);
+                name.setText(item.fname + " " + item.lname);
                 email.setText(item.email);
                 profile.setImageBitmap(item.image);
                 broadcast.setChecked(item.broadcast);

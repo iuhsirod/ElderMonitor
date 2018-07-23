@@ -19,7 +19,6 @@
         android:id="@+id/name"
         android:layout_width="225dp"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:textSize="22sp"/>
 
 

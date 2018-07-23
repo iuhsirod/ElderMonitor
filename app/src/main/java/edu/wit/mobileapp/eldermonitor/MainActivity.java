@@ -2,10 +2,8 @@ package edu.wit.mobileapp.eldermonitor;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -169,7 +167,7 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "Entering onCreateOptionsMenu");
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
     }
